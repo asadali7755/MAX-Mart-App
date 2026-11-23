@@ -439,6 +439,17 @@ table.mt{width:100%;border-collapse:collapse;background:var(--card);border:1px s
 .choose2 button{display:flex;align-items:center;gap:12px;min-height:64px;border-radius:18px;background:#fff;border:2px solid #9DBEE6;padding:8px 14px;font-weight:800;font-size:16px;text-align:start;color:#14231C}
 .choose2 button.on{border-color:var(--g3);background:#DDF3E5}
 .choose2 button i{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;font-style:normal;background:var(--g3);color:#fff}
+/* packer */
+.packer{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:14px;margin-top:14px}
+.packer>b{display:block;font-size:18px;line-height:1.5;margin-bottom:8px}
+.packer .chips .chip{display:flex;align-items:center;gap:8px}
+.packer .chip .ava{width:28px;height:28px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:800;font-size:13px;color:var(--g3)}
+.packer .chip.on .ava{background:var(--g3);color:#fff}
+.sentok{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:14px;padding:10px 12px;margin-top:10px;font-weight:700;line-height:1.45}
+.sentok i{width:32px;height:32px;border-radius:50%;background:var(--grn);color:#fff;display:grid;place-items:center;flex:none}
+.stafrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.stafrow span{flex:1;font-weight:700}.stafrow small{display:block;color:var(--mut);font-weight:600}
+.stafrow button{width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--red);font-weight:800;font-size:20px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -676,8 +687,8 @@ function seed(){return {E:[],next:1001};const r=rng(11),E=[];let id=1001;const M
  .forEach(([pid,items,st])=>E.push({id:id++,pid,k:'o',d:t,items,amt:sum(items),st,m:'khata'}));
  return {E,next:id}}
 const KEY='maxmart_v5';let DB;
-function fresh(){applyCatalog([]);const d=seed();d.NP=[];d.acc={};d.CI=[];return d}
-function load(){try{const j=localStorage.getItem(KEY);if(j){DB=JSON.parse(j);DB.NP=DB.NP||[];DB.acc=DB.acc||{};DB.CI=DB.CI||[];DB.E.forEach(e=>{if(e.st==='onway')e.st='packed'});applyCatalog(DB.CI);return}}catch(e){}DB=fresh();save()}
+function fresh(){applyCatalog([]);const d=seed();d.NP=[];d.acc={};d.CI=[];d.staff=[];return d}
+function load(){try{const j=localStorage.getItem(KEY);if(j){DB=JSON.parse(j);DB.NP=DB.NP||[];DB.acc=DB.acc||{};DB.CI=DB.CI||[];DB.staff=DB.staff||[];DB.E.forEach(e=>{if(e.st==='onway')e.st='packed'});applyCatalog(DB.CI);return}}catch(e){}DB=fresh();save()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
 const ofP=pid=>DB.E.filter(e=>e.pid===pid);
 function stats(pid){let buy=0,paid=0,first=null,lastPay=null,orders=0;for(const e of DB.E){if(e.pid!==pid)continue;if(e.k==='o'){if(e.st==='pending')continue;buy+=e.amt;orders++;if(!first||e.d<first)first=e.d}else{paid+=e.amt;if(!lastPay||e.d>lastPay)lastPay=e.d}}return{buy,paid,bal:buy-paid,first,lastPay,orders}}
@@ -816,7 +827,7 @@ V.ohome=()=>{const ps=segP(),ids=ps.map(p=>p.id);let buy=0,paid=0;ids.forEach(i=
  <div class="kpi"><div><small>${L('Kul sale','کل سیل')}</small><b>${N(buy)}</b></div><div class="y"><small>${L('Kul wasool','کل وصول')}</small><b>${N(paid)}</b></div><div class="r"><small>${L('Kul baqaya','کل باقایا')}</small><b>${N(buy-paid)}</b></div><div><small>${L('Is mahine ki sale','اس مہینے کی سیل')}</small><b>${N(cur.buy)}</b></div></div></div>
  <div class="sec">${(()=>{const w=DB.E.filter(e=>e.k==='o'&&(e.st==='confirmed'||e.st==='packed')).sort((a,b)=>(a.st==='confirmed'?0:1)-(b.st==='confirmed'?0:1)||b.id-a.id);if(!w.length)return '';
   return `<div class="h"><h3>${L('Abhi kaam jari hai','ابھی کام جاری ہے')} · ${w.length}</h3></div>${w.map(e=>{const p=party(e.pid),n=e.items.length,d=e.items.filter((_,i)=>(e.pk||{})[i]).length;
-   return `<button class="wip ${e.st==='packed'?'pk':''}" data-a="oorder" data-v="${e.id}"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span class="t"><b>${pname(p)} · #${e.id}</b><small>${e.st==='confirmed'?L(`Packing: ${d}/${n} cheezein`,`پیکنگ: ${d}/${n} چیزیں`):(e.wa?L('Bill bhej diya','بل بھیج دیا'):L('WhatsApp bill bhejna hai','واٹس ایپ بل بھیجنا ہے'))+(e.pick?' · '+Lp(...PICK[e.pick]):'')}</small>${e.st==='confirmed'?`<span class="pkbar"><i style="width:${n?d/n*100:0}%"></i></span>`:''}</span>${stB(e.st)}</button>`}).join('')}`})()}
+   return `<button class="wip ${e.st==='packed'?'pk':''}" data-a="oorder" data-v="${e.id}"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span class="t"><b>${pname(p)} · #${e.id}</b><small>${e.st==='confirmed'?(e.pkSent?L(`${e.pkSent} packing kar raha hai`,`${e.pkSent} پیکنگ کر رہا ہے`):L(`Packing: ${d}/${n} cheezein`,`پیکنگ: ${d}/${n} چیزیں`)):(e.wa?L('Bill bhej diya','بل بھیج دیا'):L('WhatsApp bill bhejna hai','واٹس ایپ بل بھیجنا ہے'))+(e.pick?' · '+Lp(...PICK[e.pick]):'')}</small>${e.st==='confirmed'?`<span class="pkbar"><i style="width:${n?d/n*100:0}%"></i></span>`:''}</span>${stB(e.st)}</button>`}).join('')}`})()}
  ${(()=>{const n=(DB.NP||[]).filter(p=>p.t===S.seg&&p.isNew).length;return n?`<div class="alert" style="background:#E4F4EA;color:#0E5C46"><i style="background:var(--grn)">${n}</i><span>${L('naya account bana hai · neeche dekhein','نیا اکاؤنٹ بنا ہے · نیچے دیکھیں')}</span></div>`:''})()}${pend?`<button class="alert" data-a="go" data-v="oorders"><i>${pend}</i><span>${L('naye order confirm ka intezar kar rahe hain','نئے آرڈر کنفرم کا انتظار کر رہے ہیں')}</span></button>`:''}
  ${(()=>{const nw=(DB.NP||[]).filter(p=>p.t===S.seg&&p.isNew).slice().reverse();return nw.length?`<div class="h"><h3>${L('Naye accounts','نئے اکاؤنٹ')} · ${nw.length}</h3></div>${nw.map(p=>`<div class="newc"><div class="row"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span style="flex:1"><b>${pname(p)} <span class="sb st-pending">${Lp('Naya','نیا')}</span></b><small>${p.shop?p.n+' · ':''}${vname(p.v)} · ${fd(p.joined)}</small><small>WhatsApp ${p.wa}${p.ph!==p.wa?' · Call '+p.ph:''}</small></span></div><div class="acts"><button class="act" data-a="party" data-v="${p.id}">${L('Khata kholein','کھاتہ کھولیں')}</button><a class="act ghost" href="https://wa.me/92${p.wa.replace(/[^0-9]/g,'').slice(1)}?text=${encodeURIComponent('Assalam o Alaikum '+p.n+', MAX BACHAT MART mein khush aamdeed! Aap ka account ban gaya hai.')}" target="_blank" rel="noopener">${WA.replace('#fff','#1FA855').replace('#1FA855"/></svg>','#fff"/></svg>')} ${Lp('Khush aamdeed','خوش آمدید')}</a></div></div>`).join('')}`:''})()}
  <div class="h"><h3>${L('Har mahine: sale aur wasooli','ہر مہینے: سیل اور وصولی')}</h3></div>${mbars(m,L('Sale','سیل'),L('Wasool','وصول'))}
@@ -834,8 +845,13 @@ V.oorder=()=>{const e=DB.E.find(x=>x.id==S.oid);if(!e){S.view='oorders';return V
  ${e.items.map(([k,q],i)=>{const{it,v}=PK(k),on=!!pk[i];return `<button class="pkrow ${on?'done':''}" data-a="pkt" data-v="${i}"><span class="tk">${on?CHECK:''}</span><span class="pa" style="background:${it.bg}">${art(it.img)}</span><span class="t"><b>${nmI(it)}</b><small>${L(v.ro,v.ur)} · ${N(v.p)}</small></span><span class="qb"><strong>× ${q}</strong><small>${N(q*v.p)}</small></span></button>`}).join('')}
  <p class="note" style="margin-top:0">${L('Har cheez pack karte waqt us par tick lagayein','ہر چیز پیک کرتے وقت اس پر ٹک لگائیں')}</p>
  <div class="sum"><div><span>${L('Cheezein','چیزیں')}</span><b>${n} · ${e.items.reduce((a,[,q])=>a+q,0)} ${L('adad','عدد')}</b></div><div><span>${L('Payment','پیمنٹ')}</span><b>${mpl(e.m,p)}</b></div><div class="tt"><span>${L('Kul raqam','کل رقم')}</span><span>${N(e.amt)}</span></div></div>
- ${e.st==='pending'||e.st==='confirmed'?`<button class="big ${e.st==='confirmed'?'y':''}" data-a="adv" data-v="${e.id}">${e.st==='confirmed'?CHECK+' ':''}${L(...NEXT[e.st])}</button>`:''}
- ${e.st==='confirmed'?`<p class="note">${L('Saari cheezein pack karke "Pack ho gaya" dabayein. Phir customer ko WhatsApp par bill jayega.','ساری چیزیں پیک کر کے "پیک ہو گیا" دبائیں۔ پھر کسٹمر کو واٹس ایپ پر بل جائے گا۔')}</p>`:''}
+ ${e.st==='pending'?`<button class="big" data-a="adv" data-v="${e.id}">${L(...NEXT.pending)}</button>`:''}
+ ${e.st==='confirmed'?(()=>{const st=DB.staff||[],sel=st.find(s=>s.id===e.packer)||(st.length===1?st[0]:null);return `<div class="packer"><b>${L('Packing kaun karega?','پیکنگ کون کرے گا؟')}</b>
+  <div class="chips">${st.map(s=>`<button class="chip ${sel&&sel.id===s.id?'on':''}" data-a="selpk" data-v="${s.id}"><span class="ava">${s.n[0]}</span>${esc(s.n)}</button>`).join('')}<button class="chip" data-a="addpk">+ ${st.length?L('Aur','اور'):L('Packing wala add karein','پیکنگ والا شامل کریں')}</button></div>
+  ${sel?`<button class="big wa" data-a="sendpk" data-v="${sel.id}">${WA} ${esc(sel.n)} ${L('ko list bhejein','کو لسٹ بھیجیں')}</button>`:`<p class="note" style="margin:10px 0 0;text-align:start">${L('Pehle pack karne wale larke ka naam aur WhatsApp number daalein','پہلے پیک کرنے والے لڑکے کا نام اور واٹس ایپ نمبر ڈالیں')}</p>`}
+  ${e.pkSent?`<div class="sentok"><i>${CHECK}</i><span>${esc(e.pkSent)} ${L('ko list bhej di','کو لسٹ بھیج دی')}<small style="display:block;color:var(--mut);font-weight:600">${L('Jab wo bataye ke pack ho gaya, neeche button dabayein','جب وہ بتائے کہ پیک ہو گیا، نیچے بٹن دبائیں')}</small></span></div>`:''}</div>`})():''}
+ ${e.st==='confirmed'?`<button class="big y" data-a="adv" data-v="${e.id}">${CHECK} ${L(...NEXT.confirmed)}</button>`:''}
+ ${e.st==='confirmed'?`<p class="note">${L('Saaman pack hone ke baad "Pack ho gaya" dabayein. Phir customer ko WhatsApp par bill jayega.','سامان پیک ہونے کے بعد "پیک ہو گیا" دبائیں۔ پھر کسٹمر کو واٹس ایپ پر بل جائے گا۔')}</p>`:''}
  ${e.st==='packed'?`<div class="pbox"><b>${L('Saaman pack ho gaya','سامان پیک ہو گیا')}</b><button class="big wa" data-a="bill" data-v="${e.id}">${WA} ${e.wa?L('WhatsApp par dobara bhejein','واٹس ایپ پر دوبارہ بھیجیں'):L('WhatsApp par bill bhejein','واٹس ایپ پر بل بھیجیں')}</button>${e.wa?`<div class="pick"><i>${CHECK}</i><span>${L('Bill WhatsApp par bhej diya','بل واٹس ایپ پر بھیج دیا')}</span></div>`:''}
   <div class="pick"><i style="background:${e.pick?'var(--g3)':'#B0A890'}">?</i><span>${L('Customer ka jawab','کسٹمر کا جواب')}: <b style="display:inline">${e.pick?L(...PICK[e.pick]):L('abhi nahi aaya','ابھی نہیں آیا')}</b></span></div>
   <div class="two"><button class="big ghost" data-a="opick" data-v="self">${L('Le jayenge','لے جائیں گے')}</button><button class="big ghost" data-a="opick" data-v="deliver">${L('Deliver karna hai','ڈلیور کرنا ہے')}</button></div>
@@ -924,6 +940,12 @@ async function shareBill(id){const e=DB.E.find(x=>x.id==id),p=party(e.pid),text=
  try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(er){}
  const num=(p.wa||'').replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/'+(/^03\d{9}$/.test(num)?'92'+num.slice(1):'')+'?text='+encodeURIComponent(text);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
  fin(1)}
+function packMsg(e,s){const p=party(e.pid);const lines=e.items.map(([k,q],i)=>{const{it,v}=PK(k);return `${i+1}. ${it.ro} · ${v.ro}  × ${q}`});
+ return `*MAX BACHAT MART · Packing list*\n\nAssalam o Alaikum ${s.n},\nYe order pack karna hai:\n\n*Order #${e.id}*\nCustomer: *${p.n}*${p.shop?' ('+p.shop+')':''}\nGaon: ${e.v||p.v}\nTareekh: ${fd(e.d)}\n\n${lines.join('\n')}\n\nKul: ${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nPack karke owner ko batayein: "${p.n.split(' ')[0]} / Order #${e.id} pack ho gaya"`}
+function staffSheet(){const st=DB.staff||[];sheet(`<div class="grab"></div><h3>${L('Packing wala','پیکنگ والا')}</h3><p>${L('Jo larka dukaan par saaman pack karta hai','جو لڑکا دکان پر سامان پیک کرتا ہے')}</p>
+ ${st.length?`<div style="margin-top:8px">${st.map(s=>`<div class="stafrow"><span>${esc(s.n)}<small>WhatsApp ${s.wa}</small></span><button data-a="delpk" data-v="${s.id}" aria-label="remove">×</button></div>`).join('')}</div>`:''}
+ <label class="fld">${L('Naam','نام')}<input id="s_n" placeholder="Ali"></label><label class="fld">${L('WhatsApp number','واٹس ایپ نمبر')}<input id="s_wa" type="tel" inputmode="tel" placeholder="03xx xxxxxxx"></label><div class="err" id="serr"></div>
+ <button class="big" data-a="savepk">${L('Save karein','محفوظ کریں')}</button>`)}
 /* ---------- header, tabs, render ---------- */
 const ROLE={customer:['Customer','کسٹمر'],shop:['Dukan wala','دکان دار'],owner:['Owner','مالک']};
 function hdr(){const lb=`<button class="lang" data-a="lang">${U()?'Roman':'اردو'}</button>`;
@@ -1000,6 +1022,14 @@ const A={
  roles:()=>{S.role=null;S.view='choose';history.replaceState(null,'',location.pathname+location.search);closeS();render()},
  reset:()=>{DB=fresh();save();S.seen={};S.sent={};S.carts={customer:{},shop:{}};toast(Lp('Sab data saaf ho gaya','سب ڈیٹا صاف ہو گیا'));render()},
  go:v=>{closeS();go(v)},
+ addpk:()=>staffSheet(),
+ savepk:()=>{const n=($('#s_n').value||'').trim(),wa=normPh($('#s_wa').value);if(n.length<2){$('#serr').innerHTML=L('Naam likhein','نام لکھیں');return}if(!wa){$('#serr').innerHTML=L('WhatsApp number theek likhein, jaise 0300 1234567','واٹس ایپ نمبر ٹھیک لکھیں، جیسے 0300 1234567');return}
+  const s={id:'st'+Date.now().toString(36),n,wa};DB.staff.push(s);const e=DB.E.find(x=>x.id==S.oid);if(e&&S.view==='oorder')e.packer=s.id;save();closeS();toast(Lp(`${n} save ho gaya`,`${n} محفوظ ہو گیا`));render(true)},
+ delpk:v=>{DB.staff=DB.staff.filter(s=>s.id!==v);save();staffSheet();render(true)},
+ selpk:v=>{const e=DB.E.find(x=>x.id==S.oid);if(e){e.packer=v;save();render(true)}},
+ sendpk:v=>{const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===v);if(!e||!s)return;e.packer=s.id;e.pkSent=s.n;save();
+  const num=s.wa.replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/92'+num.slice(1)+'?text='+encodeURIComponent(packMsg(e,s));w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
+  toast(Lp(`${s.n} ko list bhej di`,`${s.n} کو لسٹ بھیج دی`));render(true)},
  oorder:v=>{S.oid=+v;go('oorder')},
  pkt:v=>{const e=DB.E.find(x=>x.id==S.oid);if(!e)return;e.pk=e.pk||{};e.pk[v]=!e.pk[v];save();render(true)},
  edit:v=>{if(v){const it=ITEM(v);S.ed={id:v,kind:it.wh?'w':'r',isNewItem:false,custom:!!it.custom,ro:it.ro,ur:it.ur===it.ro?'':it.ur,c:it.c,img:typeof it.img==='string'&&it.img.startsWith('data:')?it.img:null,baseImg:it.img,desc:it.desc||'',off:!!it.off,vars:vars(v).map(x=>({k:x.k,ro:x.ro,o:x.ro,ur:x.ur,p:x.p}))}}
