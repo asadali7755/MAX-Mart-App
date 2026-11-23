@@ -509,7 +509,7 @@ const box=(c,d,e)=>sv(`${G}<path d="M24 26 38 17H80L66 26Z" fill="${c}"/><path d
 const carton=(c,d,e)=>sv(`${G}<path d="M30 30 38 14H62L70 30Z" fill="${d}"/><rect x="30" y="30" width="40" height="61" rx="3" fill="${c}"/><rect x="34" y="46" width="32" height="28" rx="6" fill="#FFFDF6"/>${e}`);
 const DRAWN={namak:()=>carton('#7FB3D5','#5B93BA',cube(50,62)),surf:()=>box('#2F80ED','#1C5FC0',bubble(45,59)),bartan:()=>box('#6BBF59','#4B9A3B',bubble(45,59)),
  ball:()=>sv(`${G}<circle cx="50" cy="56" r="32" fill="#fff" stroke="#263238" stroke-width="2.5"/><path d="M50 44l11 8-4 13H43l-4-13z" fill="#263238"/><path d="M50 24v20M61 52l18-6M57 65l10 16M43 65 33 81M39 52l-18-6" stroke="#263238" stroke-width="2.5"/>`)};
-const PHOTO=new Set(['atta','chawal','cheeni','besan','ghee','oil','ghee5','doodh','anday','dahi','tamatar','pyaz','aloo','chai','biscuit','rusk','daal','mirch','sabun','car','teddy']);
+const PHOTO=new Set(['atta','chawal','cheeni','besan','ghee','oil','ghee5','doodh','anday','dahi','tamatar','pyaz','aloo','chai','biscuit','rusk','daal','mirch','sabun','car','teddy','chips','mphali','choc','chocnut','toffee','gum','gummy','jbean','popcorn','lolly','drink','cupcake','shampoo','cond','perfw','perfm','cream','lotion','lip','nail','hairoil','paste','mehndi']);
 const PLACE=()=>sv(`${G}<rect x="22" y="28" width="56" height="62" rx="10" fill="#E9DCC0"/><path d="M36 28v-6a14 14 0 0 1 28 0v6" fill="none" stroke="#C9B48A" stroke-width="5"/><circle cx="50" cy="58" r="11" fill="#fff" opacity=".7"/>`);
 const art=id=>typeof id==='string'&&id.startsWith('data:')?`<img src="${id}" alt="" loading="lazy">`:PHOTO.has(id)?`<img src="img/${id}.jpg" alt="" loading="lazy" decoding="async">`:(DRAWN[id]?DRAWN[id]():PLACE());
 
@@ -518,7 +518,8 @@ const CATS=[
  {id:'ration',ro:'Atta aur Chawal',ur:'آٹا اور چاول',bg:'#FFE9B8',a:'atta'},{id:'ghee',ro:'Ghee aur Tail',ur:'گھی اور تیل',bg:'#FFF1A6',a:'ghee'},
  {id:'dairy',ro:'Doodh Anday',ur:'دودھ انڈے',bg:'#D9ECFF',a:'anday'},{id:'sabzi',ro:'Sabzi',ur:'سبزی',bg:'#DFF3D4',a:'tamatar'},
  {id:'chai',ro:'Chai Biscuit',ur:'چائے بسکٹ',bg:'#F6DCCB',a:'chai'},{id:'masala',ro:'Daal Masalay',ur:'دال مصالحے',bg:'#FFDCD2',a:'daal'},
- {id:'safai',ro:'Safai',ur:'صفائی',bg:'#E2E5FF',a:'sabun'},{id:'toys',ro:'Khilonay',ur:'کھلونے',bg:'#FFDDEA',a:'teddy'}];
+ {id:'safai',ro:'Safai',ur:'صفائی',bg:'#E2E5FF',a:'sabun'},{id:'toys',ro:'Khilonay',ur:'کھلونے',bg:'#FFDDEA',a:'teddy'},
+ {id:'snacks',ro:'Snacks',ur:'اسنیکس',bg:'#FFE7C2',a:'chips'},{id:'beauty',ro:'Beauty',ur:'بیوٹی',bg:'#FDE2EF',a:'perfw'}];
 const P=[
  ['atta','ration','Chakki Atta','چکی آٹا','10 kg',1150,1250],['chawal','ration','Basmati Chawal','باسمتی چاول','5 kg',1750,1900],['cheeni','ration','Cheeni','چینی','1 kg',155,0],['besan','ration','Besan','بیسن','1 kg',290,0],
  ['ghee','ghee','Banaspati Ghee','بناسپتی گھی','1 kg',560,590],['oil','ghee','Cooking Oil','کوکنگ آئل','1 litre',590,0],['ghee5','ghee','Ghee ka Bara Dabba','گھی بڑا ڈبہ','5 kg',2700,2850],
@@ -527,7 +528,13 @@ const P=[
  ['chai','chai','Chai ki Patti','چائے کی پتی','430 g',980,1050],['biscuit','chai','Biscuit','بسکٹ','family pack',180,0],['rusk','chai','Rus','رس','400 g',220,0],
  ['daal','masala','Daal Masoor','دال مسور','1 kg',340,0],['mirch','masala','Lal Mirch','لال مرچ','200 g',260,0],['namak','masala','Namak','نمک','800 g',60,0],
  ['sabun','safai','Nahane ka Sabun','نہانے کا صابن','1 pc',140,0],['surf','safai','Surf','سرف','1 kg',520,560],['bartan','safai','Bartan ki Tikiya','برتن کی ٹکیہ','1 pc',90,0],
- ['car','toys','Khilona Gari','کھلونا گاڑی','1 pc',650,0],['teddy','toys','Teddy Bear','ٹیڈی بیئر','1 pc',1200,1400],['ball','toys','Football','فٹ بال','1 pc',550,0]
+ ['car','toys','Khilona Gari','کھلونا گاڑی','1 pc',650,0],['teddy','toys','Teddy Bear','ٹیڈی بیئر','1 pc',1200,1400],['ball','toys','Football','فٹ بال','1 pc',550,0],
+ ['chips','snacks','Aloo Chips','آلو چپس','',0,0],['mphali','snacks','Namkeen Moong Phali','نمکین مونگ پھلی','',0,0],['choc','snacks','Chocolate','چاکلیٹ','',0,0],['chocnut','snacks','Dry Fruit Chocolate','ڈرائی فروٹ چاکلیٹ','',0,0],
+ ['toffee','snacks','Toffee','ٹافی','',0,0],['gum','snacks','Bubble Gum','ببل گم','',0,0],['gummy','snacks','Jelly (Gummy Bears)','جیلی (گمی بیئر)','',0,0],['jbean','snacks','Jelly Beans','جیلی بینز','',0,0],
+ ['popcorn','snacks','Popcorn','پاپ کارن','',0,0],['lolly','snacks','Lollipop','لالی پاپ','',0,0],['drink','snacks','Cold Drink','کولڈ ڈرنک','',0,0],['cupcake','snacks','Cupcake','کپ کیک','',0,0],
+ ['shampoo','beauty','Shampoo','شیمپو','',0,0],['cond','beauty','Conditioner','کنڈیشنر','',0,0],['perfw','beauty','Perfume (Khawateen)','پرفیوم (خواتین)','',0,0],['perfm','beauty','Perfume (Mardana)','پرفیوم (مردانہ)','',0,0],
+ ['cream','beauty','Face Cream','فیس کریم','',0,0],['lotion','beauty','Body Lotion','باڈی لوشن','',0,0],['lip','beauty','Lipstick','لپ اسٹک','',0,0],['nail','beauty','Nail Polish','نیل پالش','',0,0],
+ ['hairoil','beauty','Hair Oil','بالوں کا تیل','',0,0],['paste','beauty','Toothpaste','ٹوتھ پیسٹ','',0,0],['mehndi','beauty','Mehndi Cone','مہندی کون','',0,0]
 ].map(([id,c,ro,ur,u,p,o])=>({id,c,ro,ur,u,p,o,img:id,bg:CATS.find(x=>x.id===c).bg}));
 const WH=[
  ['w_atta','atta','Chakki Atta','چکی آٹا','',0],['w_cheeni','cheeni','Cheeni','چینی','',0],
@@ -535,7 +542,8 @@ const WH=[
  ['w_chawal','chawal','Basmati Chawal','باسمتی چاول','',0],['w_daal','daal','Daal Masoor','دال مسور','',0],
  ['w_chai','chai','Chai ki Patti','چائے کی پتی','',0],['w_biscuit','biscuit','Biscuit','بسکٹ','',0],
  ['w_sabun','sabun','Nahane ka Sabun','نہانے کا صابن','',0],['w_surf','surf','Surf','سرف','',0],
- ['w_mirch','mirch','Lal Mirch','لال مرچ','',0],['w_anday','anday','Anday','انڈے','',0]
+ ['w_mirch','mirch','Lal Mirch','لال مرچ','',0],['w_anday','anday','Anday','انڈے','',0],
+ ['w_chips','chips','Aloo Chips','آلو چپس','',0],['w_toffee','toffee','Toffee','ٹافی','',0],['w_shampoo','shampoo','Shampoo','شیمپو','',0]
 ].map(([id,img,ro,ur,u,p])=>({id,img,ro,ur,u,p,o:0,bg:'#FFF4DA',wh:1}));
 const IB=Object.fromEntries([...P,...WH].map(x=>[x.id,x]));
 const ITEM=id=>IB[id];
@@ -563,6 +571,32 @@ const VARS={
  surf:[['500g','500 g','500 گرام',270],['1kg','1 kg','1 کلو',520],['3kg','3 kg','3 کلو',1500]],
  bartan:[['1','1 tikiya','1 ٹکیہ',90],['3','3 tikiyan','3 ٹکیاں',260]],
  car:[['1','1 gari','1 گاڑی',650]],teddy:[['s','Chhota teddy','چھوٹا ٹیڈی',800],['l','Bara teddy','بڑا ٹیڈی',1200]],ball:[['4','Size 4','سائز 4',450],['5','Size 5','سائز 5',550]],
+ chips:[['s','Chhota packet','چھوٹا پیکٹ',30],['m','Bara packet','بڑا پیکٹ',100],['box','Dabba · 12 chhote','ڈبہ · 12 چھوٹے',340]],
+ mphali:[['100g','100 g','100 گرام',90],['250g','250 g','250 گرام',210],['1kg','1 kg','1 کلو',780]],
+ choc:[['s','Chhoti chocolate','چھوٹی چاکلیٹ',60],['l','Bari chocolate','بڑی چاکلیٹ',250],['box','Dabba · 24 chhoti','ڈبہ · 24 چھوٹی',1350]],
+ chocnut:[['1','1 bar','1 بار',350],['3','3 bar','3 بار',1000]],
+ toffee:[['10','10 toffee','10 ٹافیاں',50],['pk','Packet · 50 toffee','پیکٹ · 50 ٹافیاں',220]],
+ gum:[['5','5 gum','5 گم',25],['jar','Jar · 100 gum','جار · 100 گم',420]],
+ gummy:[['s','Chhota packet','چھوٹا پیکٹ',50],['l','Bara packet','بڑا پیکٹ',150]],
+ jbean:[['100g','100 g','100 گرام',120],['250g','250 g','250 گرام',280]],
+ popcorn:[['s','Chhota packet','چھوٹا پیکٹ',50],['l','Bara bucket','بڑی بالٹی',200]],
+ lolly:[['1','1 lollipop','1 لالی پاپ',20],['pk','Packet · 25','پیکٹ · 25',420]],
+ drink:[['250','250 ml','250 ملی لیٹر',70],['500','500 ml','500 ملی لیٹر',120],['1.5','1.5 litre','ڈیڑھ لیٹر',230]],
+ cupcake:[['1','1 cupcake','1 کپ کیک',80],['6','6 cupcakes','6 کپ کیک',450]],
+ shampoo:[['sachet','10 sachet','10 ساشے',100],['200','200 ml','200 ملی لیٹر',420],['400','400 ml','400 ملی لیٹر',780]],
+ cond:[['180','180 ml','180 ملی لیٹر',450],['360','360 ml','360 ملی لیٹر',820]],
+ perfw:[['50','50 ml','50 ملی لیٹر',1500],['100','100 ml','100 ملی لیٹر',2600]],
+ perfm:[['50','50 ml','50 ملی لیٹر',1400],['100','100 ml','100 ملی لیٹر',2400]],
+ cream:[['50g','50 g','50 گرام',350],['100g','100 g','100 گرام',650]],
+ lotion:[['200','200 ml','200 ملی لیٹر',480],['400','400 ml','400 ملی لیٹر',850]],
+ lip:[['1','1 lipstick','1 لپ اسٹک',450]],
+ nail:[['1','1 bottle','1 بوتل',180],['3','3 bottle','3 بوتلیں',500]],
+ hairoil:[['100','100 ml','100 ملی لیٹر',220],['200','200 ml','200 ملی لیٹر',400]],
+ paste:[['70g','70 g','70 گرام',160],['150g','150 g','150 گرام',300]],
+ mehndi:[['1','1 cone','1 کون',40],['12','Dabba · 12 cone','ڈبہ · 12 کون',420]],
+ w_chips:[['48s','Carton · 48 chhote','کارٹن · 48 چھوٹے',1250],['24l','Carton · 24 bare','کارٹن · 24 بڑے',2200]],
+ w_toffee:[['jar','Jar · 300 toffee','جار · 300 ٹافیاں',1150],['6jar','Carton · 6 jar','کارٹن · 6 جار',6600]],
+ w_shampoo:[['lari','Sachet lari · 120','ساشے لڑی · 120',1080],['12x200','Carton · 12 × 200 ml','کارٹن · 12 × 200 ملی لیٹر',4700]],
  w_atta:[['10kg','10 kg thaila','10 کلو تھیلا',1100],['20kg','20 kg bori','20 کلو بوری',2180],['100kg','10 thailay · 100 kg','10 تھیلے · 100 کلو',11000]],
  w_cheeni:[['10kg','10 kg thaila','10 کلو تھیلا',1480],['50kg','50 kg bori','50 کلو بوری',7250]],
  w_ghee:[['12x1','Carton · 12 × 1 kg','کارٹن · 12 × 1 کلو',6420],['16kg','16 kg kanastar','16 کلو کنستر',8400]],
@@ -702,7 +736,7 @@ ${(()=>{const nw=P.filter(p=>p.isNew&&vis(p));return nw.length?`<div class="sec"
 <div class="sec"><button class="feat mo" data-a="monthly"><span class="stack">${['atta','ghee5','cheeni'].map(art).join('')}</span><span><b>${L('Mahine ka raashan','مہینے کا راشن')}</b><small>${L('Pichle mahine ki list, ek tap mein','پچھلے مہینے کی لسٹ، ایک ٹچ میں')}</small></span><span class="go">${N(MONTHLY.reduce((a,[k,q])=>a+price(k)*q,0))}</span></button></div>
 <div class="sec"><button class="feat pa" data-a="go" data-v="pkgs"><span class="stack">${['chawal','oil','daal'].map(art).join('')}</span><span><b>${L('Raashan packages','راشن پیکج')}</b><small>${L('10, 20 aur 30 din ka ghar ka saman','10، 20 اور 30 دن کا گھر کا سامان')}</small></span><span class="go">${L('Dekhein','دیکھیں')}</span></button></div>
 <div class="sec"><div class="h"><h3>${L('Sab se zyada bikne wali','سب سے زیادہ بکنے والی')}</h3><a data-a="cat" data-v="ration">${L('Sab dekhein','سب دیکھیں')}</a></div></div>
-<div class="hs">${['atta','ghee','anday','cheeni','chai','tamatar','teddy'].map(ITEM).filter(vis).map((it,i)=>card(it,i)).join('')}</div><p class="note">${L('Demo qeematein · asal rate dukaan se','ڈیمو قیمتیں · اصل ریٹ دکان سے')}</p>`}
+<div class="hs">${['atta','ghee','anday','chips','choc','cheeni','shampoo','chai','tamatar','teddy'].map(ITEM).filter(vis).map((it,i)=>card(it,i)).join('')}</div><p class="note">${L('Demo qeematein · asal rate dukaan se','ڈیمو قیمتیں · اصل ریٹ دکان سے')}</p>`}
 function shopHome(){const p=party(me()),s=stats(p.id);return `${banners([['ban3','Thok rates, seedha mart se','تھوک ریٹ، سیدھا مارٹ سے','Carton aur bori par bachat','کارٹن اور بوری پر بچت'],['ban1','60 din ka udhaar','60 دن کا ادھار','Poora hisaab app mein, har waqt','پورا حساب ایپ میں، ہر وقت','go','khata']])}
 <div class="sec"><button class="feat sk" data-a="go" data-v="khata"><span class="stack"><span class="av s" style="width:54px;height:54px;border-radius:16px;font-size:18px">${ini(p)}</span></span><span><b>${p.shop}</b><small>${L('Aap ka udhaar','آپ کا ادھار')}: ${N(s.bal)} · ${L('Had','حد')} ${N(p.lim)}</small></span><span class="go">${L('Hisaab','حساب')}</span></button></div>
 <div class="sec"><div class="h"><h3>${L('Thok rate list','تھوک ریٹ لسٹ')}</h3><small>${WH.filter(vis).length} ${L('cheezein','چیزیں')}</small></div><div class="grid">${WH.filter(vis).sort((a,b)=>(b.isNew?1:0)-(a.isNew?1:0)).map((it,i)=>card(it,i)).join('')}</div></div><p class="note">${L('Demo qeematein · asal thok rate dukaan se','ڈیمو قیمتیں · اصل تھوک ریٹ دکان سے')}</p>`}
