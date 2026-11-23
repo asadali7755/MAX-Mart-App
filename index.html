@@ -411,6 +411,19 @@ table.mt{width:100%;border-collapse:collapse;background:var(--card);border:1px s
 .fld textarea{display:block;width:100%;margin-top:4px;min-height:84px;border-radius:14px;border:2px solid var(--line);background:var(--card);padding:10px 14px;font-size:16px;resize:vertical}
 .addrow{width:100%;min-height:48px;border-radius:14px;border:2px dashed var(--g3);color:var(--g3);font-weight:800;margin-top:4px}
 .delb{display:block;margin:14px auto 0;color:var(--red);font-weight:800;min-height:44px;text-decoration:underline}
+/* owner order detail */
+.ordc[data-a]{cursor:pointer}
+.ordc .see{font-size:13px;font-weight:800;color:var(--g3);white-space:nowrap}
+.cust{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px;margin-top:12px}
+.cust .t{flex:1}.cust b{display:block;font-size:17px;line-height:1.45}.cust small{display:block;color:var(--mut);font-weight:600;font-size:13px;line-height:1.45}
+.pkrow{display:flex;align-items:center;gap:10px;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:8px;margin-bottom:10px;width:100%;text-align:start;transition:.2s}
+.pkrow.done{border-color:var(--g3);background:var(--soft)}
+.pkrow .tk{width:34px;height:34px;border-radius:10px;border:2.5px solid var(--line);display:grid;place-items:center;flex:none;color:#fff;background:var(--card)}
+.pkrow.done .tk{background:var(--g3);border-color:var(--g3)}
+.pkrow .pa{width:62px;height:62px;border-radius:14px;overflow:hidden;flex:none;display:grid;place-items:center}
+.pkrow .t{flex:1}.pkrow b{display:block;font-size:15.5px;line-height:1.5}.pkrow small{color:var(--mut);font-weight:700;font-size:13.5px}
+.pkrow .qb{text-align:end;flex:none}.pkrow .qb strong{display:block;font-size:22px;line-height:1.1;color:var(--ink)}.pkrow .qb small{font-size:12.5px}
+.pkbar{height:10px;border-radius:8px;background:var(--line);overflow:hidden;margin:4px 0 12px}.pkbar i{display:block;height:100%;background:var(--g3);transition:width .4s}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -647,8 +660,8 @@ const itemsTxt=e=>{const n=e.items.map(([k])=>{const it=PK(k).it;return Lp(it.ro
 const thumbs=e=>`<span class="thumbs">${e.items.slice(0,3).map(([k])=>`<span>${art(PK(k).it.img)}</span>`).join('')}</span>`;
 const NEXT={pending:['Confirm karein','کنفرم کریں'],confirmed:['Rawana karein','روانہ کریں'],onway:['Pohanch gaya','پہنچ گیا']};
 function ordCard(e,own){const p=party(e.pid);
- return `<div class="ordc"><div class="r1">${own?`<button class="nmb" data-a="party" data-v="${p.id}"><b>${pname(p)}</b><small>${p.shop?p.n+' · ':''}${vname(p.v)}</small></button>`:`<button class="nmb" data-a="openord" data-v="${e.id}"><b>${L('Order','آرڈر')} #${e.id}</b><small>${fd(e.d)}</small></button>`}${stB(e.st)}</div>
- <div class="r2">${thumbs(e)}<span class="it">${itemsTxt(e)}</span></div>
+ return `<div class="ordc" ${own?`data-a="oorder" data-v="${e.id}"`:''}><div class="r1">${own?`<span class="nmb"><b>${pname(p)}</b><small>${p.shop?p.n+' · ':''}${vname(p.v)}</small></span>`:`<button class="nmb" data-a="openord" data-v="${e.id}"><b>${L('Order','آرڈر')} #${e.id}</b><small>${fd(e.d)}</small></button>`}${stB(e.st)}</div>
+ <div class="r2">${thumbs(e)}<span class="it" style="flex:1">${e.items.length} ${L('cheezein','چیزیں')} · ${itemsTxt(e)}</span>${own?`<span class="see">${L('Saaman dekhein ›','سامان دیکھیں ›')}</span>`:''}</div>
  <div class="r3"><span>${own?`#${e.id} · ${fd(e.d)} · `:''}${mpl(e.m,p)}</span><b>${N(e.amt)}</b>${own?(NEXT[e.st]?`<button class="act" data-a="adv" data-v="${e.id}">${L(...NEXT[e.st])}</button>`:''):`<button class="act ghost" data-a="openord" data-v="${e.id}">${L('Dekhein','دیکھیں')}</button>`}</div></div>`}
 const entryRow=e=>{const p=party(e.pid);return e.k==='o'?`<div><span class="ic o">${BAG}</span><b>${L('Order','آرڈر')} #${e.id}<small>${fd(e.d)} · ${itemsTxt(e)}${e.m!=='khata'?' · '+Lp(...MP[e.m]):''}</small></b>${e.st!=='delivered'?stB(e.st):''}<em class="up">+ ${N(e.amt)}</em></div>`:`<div><span class="ic p">${PAYI}</span><b>${L('Adaigi','ادائیگی')} · ${L(...MP[e.m])}<small>${fd(e.d)}</small></b><em class="dn">− ${N(e.amt)}</em></div>`};
 const mbars=(m,a,b)=>{const mx=Math.max(1,...m.map(x=>Math.max(x.buy,x.paid)));return `<div class="mb"><div class="lg"><span><i class="s"></i>${a}</span><span><i class="p"></i>${b}</span></div>${m.map(x=>`<div class="mr"><span>${fmn(x.ym)}</span><div><i class="s" style="width:${x.buy/mx*100}%;background:var(--g3)"></i><i class="p" style="width:${x.paid/mx*100}%;background:var(--y)"></i></div><em>${N(x.buy)}<small>${N(x.paid)}</small></em></div>`).join('')}</div>`};
@@ -771,6 +784,18 @@ V.ohome=()=>{const ps=segP(),ids=ps.map(p=>p.id);let buy=0,paid=0;ids.forEach(i=
 V.oorders=()=>{const ids=segP().map(p=>p.id),F=[['pending','Naye','نئے'],['confirmed','Confirm','کنفرم'],['onway','Raaste mein','راستے میں'],['delivered','Mukammal','مکمل']];
  const list=DB.E.filter(e=>e.k==='o'&&ids.includes(e.pid)&&e.st===S.of).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id).slice(0,40);
  return `<div class="sec"><div class="chips" style="flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px">${F.map(([k,r,u])=>`<button class="chip ${S.of===k?'on':''}" data-a="of" data-v="${k}">${L(r,u)} <small>${DB.E.filter(e=>e.k==='o'&&ids.includes(e.pid)&&e.st===k).length}</small></button>`).join('')}</div><div style="margin-top:12px">${list.length?list.map(e=>ordCard(e,true)).join(''):`<div class="empty">${L('Is list mein koi order nahi','اس لسٹ میں کوئی آرڈر نہیں')}</div>`}</div></div>`};
+V.oorder=()=>{const e=DB.E.find(x=>x.id==S.oid);if(!e){S.view='oorders';return V.oorders()}const p=party(e.pid),pk=e.pk||{},done=e.items.filter((_,i)=>pk[i]).length,n=e.items.length;
+ const col={pending:'#FFF1CC',confirmed:'#DDF3E5',onway:'#DCEBFF',delivered:'var(--soft)'}[e.st];
+ return `${backB('oorders',`${L('Order','آرڈر')} #${e.id}`)}<div class="sec">
+ <div class="stcard" style="background:${col};color:#14231C"><span class="ic">${e.st==='pending'?'<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#8A5A00" stroke-width="2.5"/><path d="M12 7v5l3 2" fill="none" stroke="#8A5A00" stroke-width="2.5" stroke-linecap="round"/></svg>':CHECK}</span><span><b>${e.st==='pending'?L('Naya order · confirm karna hai','نیا آرڈر · کنفرم کرنا ہے'):L(...STL[e.st])}</b><small>${fd(e.d)} · ${mpl(e.m,p)}</small></span></div>
+ <div class="cust"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span class="t"><b>${pname(p)}</b><small>${p.shop?p.n+' · ':''}${vname(e.v||p.v)}</small><small>WhatsApp ${p.wa||p.ph}${p.wa&&p.wa!==p.ph?' · Call '+p.ph:''}</small><small>${L('Purana baqaya','پرانا باقایا')}: ${N(stats(p.id).bal)}</small></span><button class="act ghost" data-a="party" data-v="${p.id}">${L('Khata','کھاتہ')}</button></div>
+ <div class="h" style="margin-top:16px"><h3>${L('Kya kya chahiye','کیا کیا چاہیے')} · ${n}</h3><small>${done}/${n} ${L('pack','پیک')}</small></div>
+ <div class="pkbar"><i style="width:${n?done/n*100:0}%"></i></div>
+ ${e.items.map(([k,q],i)=>{const{it,v}=PK(k),on=!!pk[i];return `<button class="pkrow ${on?'done':''}" data-a="pkt" data-v="${i}"><span class="tk">${on?CHECK:''}</span><span class="pa" style="background:${it.bg}">${art(it.img)}</span><span class="t"><b>${nmI(it)}</b><small>${L(v.ro,v.ur)} · ${N(v.p)}</small></span><span class="qb"><strong>× ${q}</strong><small>${N(q*v.p)}</small></span></button>`}).join('')}
+ <p class="note" style="margin-top:0">${L('Har cheez pack karte waqt us par tick lagayein','ہر چیز پیک کرتے وقت اس پر ٹک لگائیں')}</p>
+ <div class="sum"><div><span>${L('Cheezein','چیزیں')}</span><b>${n} · ${e.items.reduce((a,[,q])=>a+q,0)} ${L('adad','عدد')}</b></div><div><span>${L('Payment','پیمنٹ')}</span><b>${mpl(e.m,p)}</b></div><div class="tt"><span>${L('Kul raqam','کل رقم')}</span><span>${N(e.amt)}</span></div></div>
+ ${NEXT[e.st]?`<button class="big ${e.st==='pending'?'':'y'}" data-a="adv" data-v="${e.id}">${L(...NEXT[e.st])}</button>`:`<div class="hint" style="border-style:solid;border-color:var(--g3);background:var(--soft)">${L('Ye order mukammal ho chuka hai','یہ آرڈر مکمل ہو چکا ہے')}</div>`}
+ ${e.st==='pending'?`<p class="note">${L('Saaman dekh kar confirm karein. Confirm hote hi customer ke app mein "Shop ne confirm kar diya" aa jayega.','سامان دیکھ کر کنفرم کریں۔ کنفرم ہوتے ہی کسٹمر کی ایپ میں "دکان نے کنفرم کر دیا" آ جائے گا۔')}</p>`:''}</div>`};
 function klist(){const q=S.kq.toLowerCase();const r=segP().filter(p=>!q||(p.n+' '+(p.shop||'')+' '+p.v).toLowerCase().includes(q)).map(p=>[p,stats(p.id)]).sort((a,b)=>b[1].bal-a[1].bal);return r.length?r.map(([p,s])=>prow(p,s)).join(''):`<div class="empty">${L('Koi khata nahi mila','کوئی کھاتہ نہیں ملا')}</div>`}
 V.okhate=()=>{const ps=segP().map(p=>stats(p.id));const tot=ps.reduce((a,s)=>a+Math.max(0,s.bal),0);
  return `<div class="sec"><div class="sumbar"><small>${ps.length} ${L('khate','کھاتے')} · ${S.seg==='shop'?L('Dukanein','دکانیں'):L('Gaon ke log','گاؤں کے لوگ')}</small><b>${L('Kul baqaya','کل باقایا')}: ${N(tot)}</b></div>
@@ -841,7 +866,7 @@ function tabs(){if(!S.role||S.view==='reg'){tabsEl.style.display='none';return}t
  const own=S.role==='owner',ids=own?segP().map(p=>p.id):[];
  const T=own?[['ohome','home','Home','ہوم'],['oorders','orders','Orders','آرڈر',DB.E.filter(e=>e.k==='o'&&e.st==='pending'&&ids.includes(e.pid)).length],['okhate','khata','Khate','کھاتے'],['ocat','box','Saaman','سامان'],['orem','bell','Yaad-dihani','یاد دہانی',segP().filter(p=>stats(p.id).bal>0).length]]
   :[['home','home','Ghar','گھر'],['khata','khata','Khata','کھاتہ'],['cart','','Tokri','ٹوکری',count()],['orders','orders','Orders','آرڈر'],['account','account','Account','اکاؤنٹ']];
- const map={oitem:'ocat',cat:'home',pkgs:'home',pkg:'home',item:'home',order:'orders',oparty:'okhate'};const cur=map[S.view]||S.view;
+ const map={oorder:'oorders',oitem:'ocat',cat:'home',pkgs:'home',pkg:'home',item:'home',order:'orders',oparty:'okhate'};const cur=map[S.view]||S.view;
  tabsEl.style.gridTemplateColumns=`repeat(${T.length},minmax(0,1fr))`;
  tabsEl.innerHTML=T.map(([k,ic,r,u,b])=>k==='cart'?`<button class="tab mid ${cur===k?'on':''}" data-a="go" data-v="cart" id="cartTab"><span class="c"><svg viewBox="0 0 24 24" width="28" height="28"><path d="M3 4h3l2.5 11h10L21 8H7.5" fill="none" stroke="#083D2F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="19.5" r="1.8" fill="#083D2F"/><circle cx="17" cy="19.5" r="1.8" fill="#083D2F"/></svg><span class="badge" id="badge">${b||''}</span></span><span>${L(r,u)}</span></button>`
   :`<button class="tab ${cur===k?'on':''}" data-a="go" data-v="${k}"><span class="ib"><svg viewBox="0 0 24 24" fill="currentColor">${TI[ic]}</svg>${b?`<span class="badge">${b}</span>`:''}</span><span>${L(r,u)}</span></button>`).join('')}
@@ -907,6 +932,8 @@ const A={
  roles:()=>{S.role=null;S.view='choose';history.replaceState(null,'',location.pathname+location.search);closeS();render()},
  reset:()=>{DB=fresh();save();S.seen={};S.sent={};S.carts={customer:{},shop:{}};toast(Lp('Demo data naya ho gaya','ڈیمو ڈیٹا نیا ہو گیا'));render()},
  go:v=>{closeS();go(v)},
+ oorder:v=>{S.oid=+v;go('oorder')},
+ pkt:v=>{const e=DB.E.find(x=>x.id==S.oid);if(!e)return;e.pk=e.pk||{};e.pk[v]=!e.pk[v];save();render(true)},
  edit:v=>{if(v){const it=ITEM(v);S.ed={id:v,kind:it.wh?'w':'r',isNewItem:false,custom:!!it.custom,ro:it.ro,ur:it.ur===it.ro?'':it.ur,c:it.c,img:typeof it.img==='string'&&it.img.startsWith('data:')?it.img:null,baseImg:it.img,desc:it.desc||'',off:!!it.off,vars:vars(v).map(x=>({k:x.k,ro:x.ro,o:x.ro,ur:x.ur,p:x.p}))}}
   else S.ed={id:null,kind:S.seg==='shop'?'w':'r',isNewItem:true,ro:'',ur:'',c:'toys',img:null,baseImg:'none',desc:'',off:false,vars:[{k:'',ro:'',p:''}]};go('oitem')},
  edaddv:()=>{S.ed.vars.push({k:'',ro:'',p:''});render(true)},
