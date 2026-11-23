@@ -206,6 +206,7 @@ img.ph,.pa img,.pl img,.ci .pa img,.thumbs img,.low img{display:block;width:100%
 .st-confirmed{background:#DDF3E5;color:#1F7A45}
 .st-onway{background:#DCEBFF;color:#1D4E89}
 .st-delivered{background:var(--soft);color:var(--mut)}
+.st-packed{background:#DCEBFF;color:#1D4E89}
 .stcard{display:flex;align-items:center;gap:14px;border-radius:22px;padding:16px;margin-top:4px}
 .stcard .ic{width:54px;height:54px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none}
 .stcard b{display:block;font-size:20px;line-height:1.5}
@@ -424,6 +425,20 @@ table.mt{width:100%;border-collapse:collapse;background:var(--card);border:1px s
 .pkrow .t{flex:1}.pkrow b{display:block;font-size:15.5px;line-height:1.5}.pkrow small{color:var(--mut);font-weight:700;font-size:13.5px}
 .pkrow .qb{text-align:end;flex:none}.pkrow .qb strong{display:block;font-size:22px;line-height:1.1;color:var(--ink)}.pkrow .qb small{font-size:12.5px}
 .pkbar{height:10px;border-radius:8px;background:var(--line);overflow:hidden;margin:4px 0 12px}.pkbar i{display:block;height:100%;background:var(--g3);transition:width .4s}
+/* packing flow */
+.wip{display:flex;align-items:center;gap:12px;width:100%;text-align:start;background:var(--card);border:2px solid var(--line);border-inline-start:6px solid var(--y);border-radius:18px;padding:10px 12px;margin-bottom:10px}
+.wip.pk{border-inline-start-color:#1D4E89}
+.wip .t{flex:1}.wip b{display:block;font-size:16px;line-height:1.45}.wip small{display:block;color:var(--mut);font-weight:600;font-size:13px;line-height:1.4}
+.wip .pkbar{margin:6px 0 0}
+.pbox{background:#EAF2FC;border:2px solid #9DBEE6;border-radius:20px;padding:14px;margin-top:14px;color:#14231C}
+.pbox>b{display:block;font-size:19px;line-height:1.5}
+.pbox .big{margin-top:10px}
+.pick{display:flex;align-items:center;gap:10px;background:#fff;border-radius:14px;padding:10px 12px;margin-top:10px;font-weight:700;line-height:1.45}
+.pick i{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none;font-style:normal;color:#fff;background:#1D4E89}
+.choose2{display:grid;gap:10px;margin-top:10px}
+.choose2 button{display:flex;align-items:center;gap:12px;min-height:64px;border-radius:18px;background:#fff;border:2px solid #9DBEE6;padding:8px 14px;font-weight:800;font-size:16px;text-align:start;color:#14231C}
+.choose2 button.on{border-color:var(--g3);background:#DDF3E5}
+.choose2 button i{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;font-style:normal;background:var(--g3);color:#fff}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -615,9 +630,10 @@ const today=()=>{const t=new Date();return `${t.getFullYear()}-${pad(t.getMonth(
 const me=()=>(S.role==='customer'||S.role==='shop')&&DB&&DB.acc?DB.acc[S.role]||null:null;
 const MP={cash:['Naqad','نقد'],ezp:['Easypaisa','ایزی پیسہ'],jc:['JazzCash','جاز کیش'],bank:['Bank transfer','بینک ٹرانسفر'],khata:['Khate mein','کھاتے میں']};
 const mpl=(m,p)=>m==='khata'&&p&&p.t==='shop'?L('Udhaar','ادھار'):L(...MP[m]);
-const ST={pending:['Intezar','انتظار'],confirmed:['Confirm ho gaya','کنفرم ہو گیا'],onway:['Raaste mein','راستے میں'],delivered:['Pohanch gaya','پہنچ گیا']};
-const STL={pending:['Shop ki tasdeeq ka intezar','دکان کی تصدیق کا انتظار'],confirmed:['Shop ne confirm kar diya','دکان نے کنفرم کر دیا'],onway:['Rider raaste mein hai','رائیڈر راستے میں ہے'],delivered:['Order pohanch gaya','آرڈر پہنچ گیا']};
-const STEP={pending:['Order bhej diya','آرڈر بھیج دیا'],confirmed:['Shop ne confirm kiya','دکان نے کنفرم کیا'],onway:['Raaste mein','راستے میں'],delivered:['Pohanch gaya','پہنچ گیا']};
+const ST={pending:['Intezar','انتظار'],confirmed:['Packing','پیکنگ'],packed:['Pack ho gaya','پیک ہو گیا'],onway:['Pack ho gaya','پیک ہو گیا'],delivered:['Mil gaya','مل گیا']};
+const STL={pending:['Shop ki tasdeeq ka intezar','دکان کی تصدیق کا انتظار'],confirmed:['Shop ne confirm kar diya · packing ho rahi hai','دکان نے کنفرم کر دیا · پیکنگ ہو رہی ہے'],packed:['Saaman pack ho gaya','سامان پیک ہو گیا'],onway:['Saaman pack ho gaya','سامان پیک ہو گیا'],delivered:['Order mil gaya','آرڈر مل گیا']};
+const STEP={pending:['Order bhej diya','آرڈر بھیج دیا'],confirmed:['Shop ne confirm kiya','دکان نے کنفرم کیا'],packed:['Pack ho gaya','پیک ہو گیا'],delivered:['Mil gaya','مل گیا']};
+const PICK={self:['Shop se khud le jaunga','دکان سے خود لے جاؤں گا'],deliver:['Ghar deliver karein','گھر ڈلیور کریں']};
 const stB=st=>`<span class="sb st-${st}">${L(...ST[st])}</span>`;
 
 /* ---------- ledger: seed + storage ---------- */
@@ -635,12 +651,12 @@ function seed(){const r=rng(11),E=[];let id=1001;const MS=['2026-07','2026-08','
  const b=balOf(E,'c1');if(b>5000)E.push({id:id++,pid:'c1',k:'p',d:'2026-11-15',amt:b-5000,m:'ezp'});
  const t=today();
  [['c2',[['atta~20kg',1],['ghee~1kg',2],['anday~12',1],['doodh~1l',3]],'pending'],['c4',[['chawal~5kg',1],['daal~1kg',2],['chai~430g',1]],'pending'],['c3',[['cheeni~1kg',2],['dahi~1kg',1],['tamatar~1kg',2]],'confirmed'],
-  ['s2',[['w_cheeni~50kg',2],['w_ghee~12x1',1],['w_biscuit~24f',3]],'pending'],['s4',[['w_atta~20kg',5],['w_oil~12x1',1]],'pending'],['s5',[['w_chai~12x430',1],['w_sabun~72',1]],'onway']]
+  ['s2',[['w_cheeni~50kg',2],['w_ghee~12x1',1],['w_biscuit~24f',3]],'pending'],['s4',[['w_atta~20kg',5],['w_oil~12x1',1]],'pending'],['s5',[['w_chai~12x430',1],['w_sabun~72',1]],'packed']]
  .forEach(([pid,items,st])=>E.push({id:id++,pid,k:'o',d:t,items,amt:sum(items),st,m:'khata'}));
  return {E,next:id}}
 const KEY='maxmart_v4';let DB;
 function fresh(){applyCatalog([]);const d=seed();d.NP=[];d.acc={};d.CI=[];return d}
-function load(){try{const j=localStorage.getItem(KEY);if(j){DB=JSON.parse(j);DB.NP=DB.NP||[];DB.acc=DB.acc||{};DB.CI=DB.CI||[];applyCatalog(DB.CI);return}}catch(e){}DB=fresh();save()}
+function load(){try{const j=localStorage.getItem(KEY);if(j){DB=JSON.parse(j);DB.NP=DB.NP||[];DB.acc=DB.acc||{};DB.CI=DB.CI||[];DB.E.forEach(e=>{if(e.st==='onway')e.st='packed'});applyCatalog(DB.CI);return}}catch(e){}DB=fresh();save()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
 const ofP=pid=>DB.E.filter(e=>e.pid===pid);
 function stats(pid){let buy=0,paid=0,first=null,lastPay=null,orders=0;for(const e of DB.E){if(e.pid!==pid)continue;if(e.k==='o'){if(e.st==='pending')continue;buy+=e.amt;orders++;if(!first||e.d<first)first=e.d}else{paid+=e.amt;if(!lastPay||e.d>lastPay)lastPay=e.d}}return{buy,paid,bal:buy-paid,first,lastPay,orders}}
@@ -658,11 +674,11 @@ const inCart=id=>Object.entries(cart()).filter(([k])=>k.split('~')[0]===id).redu
 const card=(it,i=0)=>{const n=inCart(it.id);return `<button class="pc" data-a="item" data-v="${it.id}" style="animation-delay:${Math.min(i,8)*35}ms"><span class="pa" style="background:${it.bg}">${art(it.img)}</span>${n?`<span class="inc">${n}</span>`:''}${it.isNew?`<span class="newtag">${Lp('Naya','نیا')}</span>`:''}<span class="nm">${nmI(it)}</span></button>`};
 const itemsTxt=e=>{const n=e.items.map(([k])=>{const it=PK(k).it;return Lp(it.ro,it.ur)});return n.slice(0,2).join(', ')+(n.length>2?` +${n.length-2}`:'')};
 const thumbs=e=>`<span class="thumbs">${e.items.slice(0,3).map(([k])=>`<span>${art(PK(k).it.img)}</span>`).join('')}</span>`;
-const NEXT={pending:['Confirm karein','کنفرم کریں'],confirmed:['Rawana karein','روانہ کریں'],onway:['Pohanch gaya','پہنچ گیا']};
+const NEXT={pending:['Confirm karein','کنفرم کریں'],confirmed:['Pack ho gaya','پیک ہو گیا']};
 function ordCard(e,own){const p=party(e.pid);
  return `<div class="ordc" ${own?`data-a="oorder" data-v="${e.id}"`:''}><div class="r1">${own?`<span class="nmb"><b>${pname(p)}</b><small>${p.shop?p.n+' · ':''}${vname(p.v)}</small></span>`:`<button class="nmb" data-a="openord" data-v="${e.id}"><b>${L('Order','آرڈر')} #${e.id}</b><small>${fd(e.d)}</small></button>`}${stB(e.st)}</div>
  <div class="r2">${thumbs(e)}<span class="it" style="flex:1">${e.items.length} ${L('cheezein','چیزیں')} · ${itemsTxt(e)}</span>${own?`<span class="see">${L('Saaman dekhein ›','سامان دیکھیں ›')}</span>`:''}</div>
- <div class="r3"><span>${own?`#${e.id} · ${fd(e.d)} · `:''}${mpl(e.m,p)}</span><b>${N(e.amt)}</b>${own?(NEXT[e.st]?`<button class="act" data-a="adv" data-v="${e.id}">${L(...NEXT[e.st])}</button>`:''):`<button class="act ghost" data-a="openord" data-v="${e.id}">${L('Dekhein','دیکھیں')}</button>`}</div></div>`}
+ <div class="r3"><span>${own?`#${e.id} · ${fd(e.d)} · `:''}${mpl(e.m,p)}</span><b>${N(e.amt)}</b>${own?(e.st==='pending'?`<button class="act" data-a="adv" data-v="${e.id}">${L(...NEXT.pending)}</button>`:e.st==='confirmed'?`<button class="act ghost" data-a="oorder" data-v="${e.id}">${L('Packing list','پیکنگ لسٹ')}</button>`:e.st==='packed'?`<button class="act ghost" data-a="oorder" data-v="${e.id}">${e.wa?L('Jawab / delivery','جواب / ڈلیوری'):L('WhatsApp bhejein','واٹس ایپ بھیجیں')}</button>`:''):`<button class="act ghost" data-a="openord" data-v="${e.id}">${L('Dekhein','دیکھیں')}</button>`}</div></div>`}
 const entryRow=e=>{const p=party(e.pid);return e.k==='o'?`<div><span class="ic o">${BAG}</span><b>${L('Order','آرڈر')} #${e.id}<small>${fd(e.d)} · ${itemsTxt(e)}${e.m!=='khata'?' · '+Lp(...MP[e.m]):''}</small></b>${e.st!=='delivered'?stB(e.st):''}<em class="up">+ ${N(e.amt)}</em></div>`:`<div><span class="ic p">${PAYI}</span><b>${L('Adaigi','ادائیگی')} · ${L(...MP[e.m])}<small>${fd(e.d)}</small></b><em class="dn">− ${N(e.amt)}</em></div>`};
 const mbars=(m,a,b)=>{const mx=Math.max(1,...m.map(x=>Math.max(x.buy,x.paid)));return `<div class="mb"><div class="lg"><span><i class="s"></i>${a}</span><span><i class="p"></i>${b}</span></div>${m.map(x=>`<div class="mr"><span>${fmn(x.ym)}</span><div><i class="s" style="width:${x.buy/mx*100}%;background:var(--g3)"></i><i class="p" style="width:${x.paid/mx*100}%;background:var(--y)"></i></div><em>${N(x.buy)}<small>${N(x.paid)}</small></em></div>`).join('')}</div>`};
 function mtable(m){let run=0;return `<div style="overflow-x:auto"><table class="mt"><thead><tr><th>${L('Mahina','مہینہ')}</th><th>${L('Khareedari','خریداری')}</th><th>${L('Ada kiya','ادا کیا')}</th><th>${L('Baqaya','باقایا')}</th></tr></thead><tbody>${m.map(x=>{run+=x.buy-x.paid;return `<tr><td>${fmn(x.ym)}</td><td>${N(x.buy)}</td><td>${N(x.paid)}</td><td class="${run>0?'r':''}">${N(run)}</td></tr>`}).join('')}</tbody></table></div>`}
@@ -730,12 +746,13 @@ V.cart=()=>{const ids=Object.keys(cart()),sh=S.role==='shop';
  <button class="big" data-a="place">${L('Order bhejein','آرڈر بھیجیں')} · ${N(st+df)}</button>
  <p class="note">${L('Order dukaan ko jayega. Shop confirm karegi to aap ko yahan aur Account mein nazar aayega.','آرڈر دکان کو جائے گا۔ دکان کنفرم کرے گی تو آپ کو یہاں اور اکاؤنٹ میں نظر آئے گا۔')}</p></div>`};
 
-V.order=()=>{const e=DB.E.find(x=>x.id==S.oid);if(!e){S.view='orders';return V.orders()}const steps=['pending','confirmed','onway','delivered'],ix=steps.indexOf(e.st),p=party(e.pid);
- const col={pending:'#FFF1CC',confirmed:'#DDF3E5',onway:'#DCEBFF',delivered:'var(--soft)'}[e.st];
+V.order=()=>{const e=DB.E.find(x=>x.id==S.oid);if(!e){S.view='orders';return V.orders()}const steps=['pending','confirmed','packed','delivered'],ix=steps.indexOf(e.st),p=party(e.pid);
+ const col={pending:'#FFF1CC',confirmed:'#DDF3E5',packed:'#DCEBFF',delivered:'var(--soft)'}[e.st];
  return `${backB('orders',`${L('Order','آرڈر')} #${e.id}`)}<div class="sec">
  <div class="stcard" style="background:${col};color:#14231C"><span class="ic" style="color:${e.st==='pending'?'#8A5A00':'#1F7A45'}">${e.st==='pending'?'<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>':CHECK}</span><span><b>${L(...STL[e.st])}</b><small>${fd(e.d)} · ${vname(e.v||p.v)} · ${mpl(e.m,p)}</small></span></div>
  ${e.st==='onway'?`<div class="trk"><svg viewBox="0 0 360 130" preserveAspectRatio="xMidYMid slice"><rect width="360" height="130" fill="#D9EEDF"/><path d="M0 76Q90 50 180 70T360 64V130H0Z" fill="#B8DEC4"/><rect y="96" width="360" height="34" fill="#2B3A33"/><path d="M0 113H360" stroke="#FFC531" stroke-width="2" stroke-dasharray="12 10"/><g transform="translate(14 34)"><rect width="62" height="62" fill="#F6EBD6"/><path d="M-4 0H66V14H-4Z" fill="#0E5C46"/><rect x="10" y="30" width="18" height="32" fill="#8A5A2B"/><rect x="34" y="30" width="20" height="16" fill="#9ED0F0"/></g><g transform="translate(292 46)"><rect y="16" width="52" height="34" fill="#fff"/><path d="M-6 18 26-6 58 18Z" fill="#E8402C"/><rect x="20" y="30" width="12" height="20" fill="#8A5A2B"/></g><g class="ridego"><g transform="translate(84 58)"><g class="bob"><use href="#rider" width="66" height="47"/></g></g></g></svg></div>`:''}
  <ul class="steps">${steps.map((k,i)=>`<li class="${i<=ix?'on':''}"><i>${i<ix||e.st==='delivered'?CHECK:i+1}</i><span>${L(...STEP[k])}</span></li>`).join('')}</ul>
+ ${e.st==='packed'?`<div class="pbox"><b>${L('Aap ka saaman pack ho gaya!','آپ کا سامان پیک ہو گیا!')}</b><span style="font-weight:600">${L('Kaise lena hai? Neeche chunein ya WhatsApp par jawab dein.','کیسے لینا ہے؟ نیچے چنیں یا واٹس ایپ پر جواب دیں۔')}</span><div class="choose2">${['self','deliver'].map(k=>`<button class="${e.pick===k?'on':''}" data-a="pickc" data-v="${k}"><i>${k==='self'?'<svg width="22" height="22" viewBox="0 0 24 24"><path d="M3 10 12 4l9 6v10H3z" fill="#fff"/><rect x="9" y="13" width="6" height="7" fill="#13704F"/></svg>':'<svg width="24" height="24" viewBox="0 0 90 64"><use href="#rider"/></svg>'}</i><span style="flex:1">${L(...PICK[k])}</span>${e.pick===k?CHECK:''}</button>`).join('')}</div></div>`:''}
  ${e.st==='pending'?`<div class="hint">${L('Demo: ab Owner app khol kar ye order confirm karein. Confirm hote hi yahan "Shop ne confirm kar diya" aa jayega.','ڈیمو: اب مالک کی ایپ کھول کر یہ آرڈر کنفرم کریں۔ کنفرم ہوتے ہی یہاں "دکان نے کنفرم کر دیا" آ جائے گا۔')}<div class="two"><a class="big y" href="#owner" target="_blank" rel="noopener">${L('Owner app · nayi tab','مالک ایپ · نئی ٹیب')}</a><button class="big" data-a="asowner" data-v="${e.id}">${L('Isi tab mein','اسی ٹیب میں')}</button></div></div>`:''}
  <div class="h" style="margin-top:14px"><h3>${L('Saaman','سامان')}</h3><small>${e.items.length}</small></div>
  ${e.items.map(([k,q])=>{const{it,v}=PK(k);return `<div class="ci"><div class="pa" style="background:${it.bg}">${art(it.img)}</div><div class="t"><b>${nmI(it)}</b><small>${L(v.ro,v.ur)} · ${q} × ${N(v.p)}</small></div><b>${N(q*v.p)}</b></div>`}).join('')}
@@ -777,24 +794,34 @@ V.ohome=()=>{const ps=segP(),ids=ps.map(p=>p.id);let buy=0,paid=0;ids.forEach(i=
  const pend=DB.E.filter(e=>e.k==='o'&&e.st==='pending'&&ids.includes(e.pid)).length;const top5=ps.map(p=>[p,stats(p.id)]).filter(x=>x[1].bal>0).sort((a,b)=>b[1].bal-a[1].bal).slice(0,5);const sh=S.seg==='shop';
  return `<div class="ow"><h2>${sh?L('Dukanon ka hisaab','دکانوں کا حساب'):L('Gaon ke customers','گاؤں کے کسٹمر')}</h2><small>${ps.length} ${sh?L('dukanein','دکانیں'):L('customers','کسٹمر')} · ${L('shuru se ab tak','شروع سے اب تک')} · demo data</small>
  <div class="kpi"><div><small>${L('Kul sale','کل سیل')}</small><b>${N(buy)}</b></div><div class="y"><small>${L('Kul wasool','کل وصول')}</small><b>${N(paid)}</b></div><div class="r"><small>${L('Kul baqaya','کل باقایا')}</small><b>${N(buy-paid)}</b></div><div><small>${L('Is mahine ki sale','اس مہینے کی سیل')}</small><b>${N(cur.buy)}</b></div></div></div>
- <div class="sec">${(()=>{const n=(DB.NP||[]).filter(p=>p.t===S.seg&&p.isNew).length;return n?`<div class="alert" style="background:#E4F4EA;color:#0E5C46"><i style="background:var(--grn)">${n}</i><span>${L('naya account bana hai · neeche dekhein','نیا اکاؤنٹ بنا ہے · نیچے دیکھیں')}</span></div>`:''})()}${pend?`<button class="alert" data-a="go" data-v="oorders"><i>${pend}</i><span>${L('naye order confirm ka intezar kar rahe hain','نئے آرڈر کنفرم کا انتظار کر رہے ہیں')}</span></button>`:''}
+ <div class="sec">${(()=>{const w=DB.E.filter(e=>e.k==='o'&&(e.st==='confirmed'||e.st==='packed')).sort((a,b)=>(a.st==='confirmed'?0:1)-(b.st==='confirmed'?0:1)||b.id-a.id);if(!w.length)return '';
+  return `<div class="h"><h3>${L('Abhi kaam jari hai','ابھی کام جاری ہے')} · ${w.length}</h3></div>${w.map(e=>{const p=party(e.pid),n=e.items.length,d=e.items.filter((_,i)=>(e.pk||{})[i]).length;
+   return `<button class="wip ${e.st==='packed'?'pk':''}" data-a="oorder" data-v="${e.id}"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span class="t"><b>${pname(p)} · #${e.id}</b><small>${e.st==='confirmed'?L(`Packing: ${d}/${n} cheezein`,`پیکنگ: ${d}/${n} چیزیں`):(e.wa?L('Bill bhej diya','بل بھیج دیا'):L('WhatsApp bill bhejna hai','واٹس ایپ بل بھیجنا ہے'))+(e.pick?' · '+Lp(...PICK[e.pick]):'')}</small>${e.st==='confirmed'?`<span class="pkbar"><i style="width:${n?d/n*100:0}%"></i></span>`:''}</span>${stB(e.st)}</button>`}).join('')}`})()}
+ ${(()=>{const n=(DB.NP||[]).filter(p=>p.t===S.seg&&p.isNew).length;return n?`<div class="alert" style="background:#E4F4EA;color:#0E5C46"><i style="background:var(--grn)">${n}</i><span>${L('naya account bana hai · neeche dekhein','نیا اکاؤنٹ بنا ہے · نیچے دیکھیں')}</span></div>`:''})()}${pend?`<button class="alert" data-a="go" data-v="oorders"><i>${pend}</i><span>${L('naye order confirm ka intezar kar rahe hain','نئے آرڈر کنفرم کا انتظار کر رہے ہیں')}</span></button>`:''}
  ${(()=>{const nw=(DB.NP||[]).filter(p=>p.t===S.seg&&p.isNew).slice().reverse();return nw.length?`<div class="h"><h3>${L('Naye accounts','نئے اکاؤنٹ')} · ${nw.length}</h3></div>${nw.map(p=>`<div class="newc"><div class="row"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span style="flex:1"><b>${pname(p)} <span class="sb st-pending">${Lp('Naya','نیا')}</span></b><small>${p.shop?p.n+' · ':''}${vname(p.v)} · ${fd(p.joined)}</small><small>WhatsApp ${p.wa}${p.ph!==p.wa?' · Call '+p.ph:''}</small></span></div><div class="acts"><button class="act" data-a="party" data-v="${p.id}">${L('Khata kholein','کھاتہ کھولیں')}</button><a class="act ghost" href="https://wa.me/92${p.wa.replace(/[^0-9]/g,'').slice(1)}?text=${encodeURIComponent('Assalam o Alaikum '+p.n+', MAX BACHAT MART mein khush aamdeed! Aap ka account ban gaya hai.')}" target="_blank" rel="noopener">${WA.replace('#fff','#1FA855').replace('#1FA855"/></svg>','#fff"/></svg>')} ${Lp('Khush aamdeed','خوش آمدید')}</a></div></div>`).join('')}`:''})()}
  <div class="h"><h3>${L('Har mahine: sale aur wasooli','ہر مہینے: سیل اور وصولی')}</h3></div>${mbars(m,L('Sale','سیل'),L('Wasool','وصول'))}
  <div class="h" style="margin-top:14px"><h3>${L('Sab se zyada baqaya','سب سے زیادہ باقایا')}</h3><a data-a="go" data-v="okhate">${L('Sab khate','سب کھاتے')}</a></div>${top5.map(([p,s])=>prow(p,s)).join('')}</div>`};
-V.oorders=()=>{const ids=segP().map(p=>p.id),F=[['pending','Naye','نئے'],['confirmed','Confirm','کنفرم'],['onway','Raaste mein','راستے میں'],['delivered','Mukammal','مکمل']];
+V.oorders=()=>{const ids=segP().map(p=>p.id),F=[['pending','Naye','نئے'],['confirmed','Packing','پیکنگ'],['packed','Pack ho gaye','پیک ہو گئے'],['delivered','Mukammal','مکمل']];
  const list=DB.E.filter(e=>e.k==='o'&&ids.includes(e.pid)&&e.st===S.of).sort((a,b)=>b.d.localeCompare(a.d)||b.id-a.id).slice(0,40);
  return `<div class="sec"><div class="chips" style="flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px">${F.map(([k,r,u])=>`<button class="chip ${S.of===k?'on':''}" data-a="of" data-v="${k}">${L(r,u)} <small>${DB.E.filter(e=>e.k==='o'&&ids.includes(e.pid)&&e.st===k).length}</small></button>`).join('')}</div><div style="margin-top:12px">${list.length?list.map(e=>ordCard(e,true)).join(''):`<div class="empty">${L('Is list mein koi order nahi','اس لسٹ میں کوئی آرڈر نہیں')}</div>`}</div></div>`};
 V.oorder=()=>{const e=DB.E.find(x=>x.id==S.oid);if(!e){S.view='oorders';return V.oorders()}const p=party(e.pid),pk=e.pk||{},done=e.items.filter((_,i)=>pk[i]).length,n=e.items.length;
- const col={pending:'#FFF1CC',confirmed:'#DDF3E5',onway:'#DCEBFF',delivered:'var(--soft)'}[e.st];
+ const col={pending:'#FFF1CC',confirmed:'#FFF7DD',packed:'#DCEBFF',delivered:'var(--soft)'}[e.st];
  return `${backB('oorders',`${L('Order','آرڈر')} #${e.id}`)}<div class="sec">
- <div class="stcard" style="background:${col};color:#14231C"><span class="ic">${e.st==='pending'?'<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#8A5A00" stroke-width="2.5"/><path d="M12 7v5l3 2" fill="none" stroke="#8A5A00" stroke-width="2.5" stroke-linecap="round"/></svg>':CHECK}</span><span><b>${e.st==='pending'?L('Naya order · confirm karna hai','نیا آرڈر · کنفرم کرنا ہے'):L(...STL[e.st])}</b><small>${fd(e.d)} · ${mpl(e.m,p)}</small></span></div>
+ <div class="stcard" style="background:${col};color:#14231C"><span class="ic">${e.st==='pending'?'<svg width="26" height="26" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#8A5A00" stroke-width="2.5"/><path d="M12 7v5l3 2" fill="none" stroke="#8A5A00" stroke-width="2.5" stroke-linecap="round"/></svg>':CHECK}</span><span><b>${e.st==='pending'?L('Naya order · confirm karna hai','نیا آرڈر · کنفرم کرنا ہے'):e.st==='confirmed'?L('Packing jari hai','پیکنگ جاری ہے'):L(...STL[e.st])}</b><small>${fd(e.d)} · ${mpl(e.m,p)}</small></span></div>
  <div class="cust"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span class="t"><b>${pname(p)}</b><small>${p.shop?p.n+' · ':''}${vname(e.v||p.v)}</small><small>WhatsApp ${p.wa||p.ph}${p.wa&&p.wa!==p.ph?' · Call '+p.ph:''}</small><small>${L('Purana baqaya','پرانا باقایا')}: ${N(stats(p.id).bal)}</small></span><button class="act ghost" data-a="party" data-v="${p.id}">${L('Khata','کھاتہ')}</button></div>
  <div class="h" style="margin-top:16px"><h3>${L('Kya kya chahiye','کیا کیا چاہیے')} · ${n}</h3><small>${done}/${n} ${L('pack','پیک')}</small></div>
  <div class="pkbar"><i style="width:${n?done/n*100:0}%"></i></div>
  ${e.items.map(([k,q],i)=>{const{it,v}=PK(k),on=!!pk[i];return `<button class="pkrow ${on?'done':''}" data-a="pkt" data-v="${i}"><span class="tk">${on?CHECK:''}</span><span class="pa" style="background:${it.bg}">${art(it.img)}</span><span class="t"><b>${nmI(it)}</b><small>${L(v.ro,v.ur)} · ${N(v.p)}</small></span><span class="qb"><strong>× ${q}</strong><small>${N(q*v.p)}</small></span></button>`}).join('')}
  <p class="note" style="margin-top:0">${L('Har cheez pack karte waqt us par tick lagayein','ہر چیز پیک کرتے وقت اس پر ٹک لگائیں')}</p>
  <div class="sum"><div><span>${L('Cheezein','چیزیں')}</span><b>${n} · ${e.items.reduce((a,[,q])=>a+q,0)} ${L('adad','عدد')}</b></div><div><span>${L('Payment','پیمنٹ')}</span><b>${mpl(e.m,p)}</b></div><div class="tt"><span>${L('Kul raqam','کل رقم')}</span><span>${N(e.amt)}</span></div></div>
- ${NEXT[e.st]?`<button class="big ${e.st==='pending'?'':'y'}" data-a="adv" data-v="${e.id}">${L(...NEXT[e.st])}</button>`:`<div class="hint" style="border-style:solid;border-color:var(--g3);background:var(--soft)">${L('Ye order mukammal ho chuka hai','یہ آرڈر مکمل ہو چکا ہے')}</div>`}
+ ${e.st==='pending'||e.st==='confirmed'?`<button class="big ${e.st==='confirmed'?'y':''}" data-a="adv" data-v="${e.id}">${e.st==='confirmed'?CHECK+' ':''}${L(...NEXT[e.st])}</button>`:''}
+ ${e.st==='confirmed'?`<p class="note">${L('Saari cheezein pack karke "Pack ho gaya" dabayein. Phir customer ko WhatsApp par bill jayega.','ساری چیزیں پیک کر کے "پیک ہو گیا" دبائیں۔ پھر کسٹمر کو واٹس ایپ پر بل جائے گا۔')}</p>`:''}
+ ${e.st==='packed'?`<div class="pbox"><b>${L('Saaman pack ho gaya','سامان پیک ہو گیا')}</b><button class="big wa" data-a="bill" data-v="${e.id}">${WA} ${e.wa?L('WhatsApp par dobara bhejein','واٹس ایپ پر دوبارہ بھیجیں'):L('WhatsApp par bill bhejein','واٹس ایپ پر بل بھیجیں')}</button>${e.wa?`<div class="pick"><i>${CHECK}</i><span>${L('Bill WhatsApp par bhej diya','بل واٹس ایپ پر بھیج دیا')}</span></div>`:''}
+  <div class="pick"><i style="background:${e.pick?'var(--g3)':'#B0A890'}">?</i><span>${L('Customer ka jawab','کسٹمر کا جواب')}: <b style="display:inline">${e.pick?L(...PICK[e.pick]):L('abhi nahi aaya','ابھی نہیں آیا')}</b></span></div>
+  <div class="two"><button class="big ghost" data-a="opick" data-v="self">${L('Le jayenge','لے جائیں گے')}</button><button class="big ghost" data-a="opick" data-v="deliver">${L('Deliver karna hai','ڈلیور کرنا ہے')}</button></div>
+  <p class="note" style="margin:8px 0 0">${L('Customer WhatsApp par jawab de to yahan khud chun lein','کسٹمر واٹس ایپ پر جواب دے تو یہاں خود چن لیں')}</p>
+  <button class="big" data-a="adv" data-v="${e.id}">${e.pick==='self'?L('Customer saaman le gaya','کسٹمر سامان لے گیا'):L('Deliver ho gaya','ڈلیور ہو گیا')}</button></div>`:''}
+ ${e.st==='delivered'?`<div class="hint" style="border-style:solid;border-color:var(--g3);background:var(--soft)">${L('Ye order mukammal ho chuka hai','یہ آرڈر مکمل ہو چکا ہے')}${e.pick?' · '+L(...PICK[e.pick]):''}</div>`:''}
  ${e.st==='pending'?`<p class="note">${L('Saaman dekh kar confirm karein. Confirm hote hi customer ke app mein "Shop ne confirm kar diya" aa jayega.','سامان دیکھ کر کنفرم کریں۔ کنفرم ہوتے ہی کسٹمر کی ایپ میں "دکان نے کنفرم کر دیا" آ جائے گا۔')}</p>`:''}</div>`};
 function klist(){const q=S.kq.toLowerCase();const r=segP().filter(p=>!q||(p.n+' '+(p.shop||'')+' '+p.v).toLowerCase().includes(q)).map(p=>[p,stats(p.id)]).sort((a,b)=>b[1].bal-a[1].bal);return r.length?r.map(([p,s])=>prow(p,s)).join(''):`<div class="empty">${L('Koi khata nahi mila','کوئی کھاتہ نہیں ملا')}</div>`}
 V.okhate=()=>{const ps=segP().map(p=>stats(p.id));const tot=ps.reduce((a,s)=>a+Math.max(0,s.bal),0);
@@ -856,6 +883,27 @@ async function share(pid){const p=party(pid),text=msgOf(pid);let blob=null;try{b
  done(pid,1)}
 function done(pid,fallback){S.sent[pid]=1;closeS();toast(fallback?Lp('File download ho gayi. WhatsApp mein attach kar dein','فائل ڈاؤن لوڈ ہو گئی۔ واٹس ایپ میں لگا دیں'):Lp('Hisaab bhej diya','حساب بھیج دیا'));render(true)}
 
+function billCanvas(e){const p=party(e.pid),rows=e.items,W=1080,RH=64,H=900+rows.length*RH,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),F=(w,z)=>`${w} ${z}px "Baloo 2", sans-serif`;
+ x.fillStyle='#F7F4EA';x.fillRect(0,0,W,H);x.fillStyle='#0E5C46';x.fillRect(0,0,W,200);
+ x.fillStyle='#FFC531';x.beginPath();x.arc(110,100,46,0,7);x.fill();x.fillStyle='#083D2F';x.font=F(800,44);x.textAlign='center';x.fillText('M',110,116);x.textAlign='left';
+ x.fillStyle='#fff';x.font=F(800,52);x.fillText('MAX BACHAT MART',180,102);x.fillStyle='#CFE6DA';x.font=F(600,26);x.fillText('Haji Shah Mor, Attock  ·  Order ka bill',180,148);
+ x.fillStyle='#14231C';x.font=F(800,40);x.fillText(pname(p),60,272);x.fillStyle='#5D6D65';x.font=F(500,26);x.fillText(`${p.shop?p.n+'  ·  ':''}${e.v||p.v}  ·  Order #${e.id}`,60,314);x.textAlign='right';x.fillText(fd(e.d),W-60,272);x.textAlign='left';
+ let y=392;x.fillStyle='#E8E3D3';x.fillRect(40,y-42,W-80,60);x.fillStyle='#14231C';x.font=F(700,24);x.fillText('Cheez',64,y);x.textAlign='right';x.fillText('Ginti',700,y);x.fillText('Rate',850,y);x.fillText('Raqam',1016,y);x.textAlign='left';
+ y+=RH;rows.forEach(([k,q],i)=>{const{it,v}=PK(k);if(i%2===0){x.fillStyle='#fff';x.fillRect(40,y-42,W-80,RH)}x.fillStyle='#14231C';x.font=F(700,25);x.fillText(it.ro,64,y-6);x.font=F(500,20);x.fillStyle='#5D6D65';x.fillText(v.ro,64,y+16);
+  x.fillStyle='#14231C';x.font=F(700,25);x.textAlign='right';x.fillText('× '+q,700,y);x.font=F(500,24);x.fillText(N(v.p),850,y);x.font=F(700,25);x.fillText(N(v.p*q),1016,y);x.textAlign='left';y+=RH});
+ y+=24;x.fillStyle='#fff';x.fillRect(40,y,W-80,130);x.strokeStyle='#E8E3D3';x.lineWidth=2;x.strokeRect(40,y,W-80,130);
+ x.fillStyle='#5D6D65';x.font=F(600,26);x.fillText('Payment: '+(e.m==='khata'?(p.t==='shop'?'Udhaar':'Khate mein'):MP[e.m][0]),70,y+52);x.fillStyle='#14231C';x.font=F(800,40);x.fillText('Kul raqam',70,y+104);x.textAlign='right';x.fillText(N(e.amt),W-70,y+104);x.textAlign='left';
+ y+=160;x.fillStyle='#FFC531';x.fillRect(40,y,W-80,200);x.fillStyle='#083D2F';x.font=F(800,32);x.fillText('Saaman pack ho gaya hai!',70,y+56);x.font=F(600,26);x.fillText('Aap shop se aa kar le jayenge ya ghar deliver karein?',70,y+102);
+ x.font=F(800,26);x.fillText('Jawab dein:  1 = Khud le jaunga     2 = Ghar deliver karein',70,y+150);x.font=F(500,22);x.fillText('Ya app mein order khol kar button dabayein',70,y+184);return c}
+const billMsg=e=>{const p=party(e.pid);return `Assalam o Alaikum ${p.n} sahib, MAX BACHAT MART se aap ka order #${e.id} pack ho gaya hai. Kul raqam ${N(e.amt)}. Bill file mein hai. Aap shop se aa kar le jayenge ya ghar deliver karein? Jawab dein: 1 = Khud le jaunga, 2 = Ghar deliver karein.`};
+function billSheet(id){const e=DB.E.find(x=>x.id==id);let url='';try{url=billCanvas(e).toDataURL('image/png')}catch(er){}
+ sheet(`<div class="grab"></div><h3>${L('Bill ki file','بل کی فائل')}</h3><p>${pname(party(e.pid))} · #${e.id} · ${N(e.amt)}</p><div class="stmt"><img src="${url}" alt="Bill"></div><button class="big wa" data-a="billshare" data-v="${e.id}">${WA} ${L('WhatsApp par bhejein','واٹس ایپ پر بھیجیں')}</button><p class="note">${L('Phone par WhatsApp khulega, customer chunein aur bill chala jayega','فون پر واٹس ایپ کھلے گا، کسٹمر چنیں اور بل چلا جائے گا')}</p>`)}
+async function shareBill(id){const e=DB.E.find(x=>x.id==id),p=party(e.pid),text=billMsg(e),name=`Bill-${e.id}.png`;let blob=null;try{blob=await new Promise(r=>billCanvas(e).toBlob(r,'image/png'))}catch(er){}
+ const fin=fb=>{e.wa=1;save();closeS();toast(fb?Lp('Bill download ho gaya. WhatsApp mein attach kar dein','بل ڈاؤن لوڈ ہو گیا۔ واٹس ایپ میں لگا دیں'):Lp('Bill bhej diya','بل بھیج دیا'));render(true)};
+ try{if(blob&&navigator.canShare){const file=new File([blob],name,{type:'image/png'});if(navigator.canShare({files:[file]})){await navigator.share({files:[file],text});fin();return}}}catch(er){if(er&&er.name==='AbortError')return}
+ try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(er){}
+ const num=(p.wa||'').replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/'+(/^03\d{9}$/.test(num)?'92'+num.slice(1):'')+'?text='+encodeURIComponent(text);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
+ fin(1)}
 /* ---------- header, tabs, render ---------- */
 const ROLE={customer:['Customer','کسٹمر'],shop:['Dukan wala','دکان دار'],owner:['Owner','مالک']};
 function hdr(){const lb=`<button class="lang" data-a="lang">${U()?'Roman':'اردو'}</button>`;
@@ -966,9 +1014,13 @@ const A={
   DB.E.push(e);S.seen[e.id]='pending';S.carts[S.role]={};save();S.oid=e.id;go('order')},
  openord:v=>{$('#note').classList.remove('on');if(S.role==='owner')return;S.oid=+v;closeS();go('order')},
  asowner:v=>{const e=DB.E.find(x=>x.id==v);S.role='owner';S.seg=party(e.pid).t;S.of='pending';S.view='oorders';history.replaceState(null,'','#owner');render()},
- adv:v=>{const e=DB.E.find(x=>x.id==v);const nx={pending:'confirmed',confirmed:'onway',onway:'delivered'}[e.st];if(!nx)return;e.st=nx;
+ adv:v=>{const e=DB.E.find(x=>x.id==v);const nx={pending:'confirmed',confirmed:'packed',packed:'delivered',onway:'delivered'}[e.st];if(!nx)return;e.st=nx;if(nx==='packed'){e.pk={};e.items.forEach((_,i)=>e.pk[i]=true)}
   if(nx==='confirmed'&&e.m!=='khata')DB.E.push({id:DB.next++,pid:e.pid,k:'p',d:today(),amt:e.amt,m:e.m});save();
-  toast(nx==='confirmed'?Lp(`Order #${e.id} confirm · customer ko nazar aa raha hai`,`آرڈر #${e.id} کنفرم · کسٹمر کو نظر آ رہا ہے`):Lp(`Order #${e.id}: ${ST[nx][0]}`,`آرڈر #${e.id}: ${ST[nx][1]}`));render(true)},
+  toast(nx==='confirmed'?Lp(`Order #${e.id} confirm · ab packing karein`,`آرڈر #${e.id} کنفرم · اب پیکنگ کریں`):nx==='packed'?Lp('Pack ho gaya · ab WhatsApp par bill bhejein','پیک ہو گیا · اب واٹس ایپ پر بل بھیجیں'):Lp(`Order #${e.id} mukammal`,`آرڈر #${e.id} مکمل`));if(S.view==='oorders'&&nx==='confirmed'){S.oid=e.id;go('oorder');return}render(true)},
+ bill:v=>billSheet(+v),
+ billshare:v=>{shareBill(+v)},
+ opick:v=>{const e=DB.E.find(x=>x.id==S.oid);if(e){e.pick=v;save();render(true)}},
+ pickc:v=>{const e=DB.E.find(x=>x.id==S.oid);if(e){e.pick=v;save();toast(Lp('Shop ko bata diya: ','دکان کو بتا دیا: ')+Lp(...PICK[v]));render(true)}},
  of:v=>{S.of=v;render(true)},
  party:v=>{S.party=v;go('oparty')},
  monthly:(v,el)=>{const c=cart();MONTHLY.forEach(([id,q])=>c[id]=(c[id]||0)+q);fly(el);toast(Lp('Tokri mein daal diya','ٹوکری میں ڈال دیا'));setTimeout(()=>go('cart'),700)},
