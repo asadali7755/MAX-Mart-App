@@ -386,6 +386,15 @@ table.mt{width:100%;border-collapse:collapse;background:var(--card);border:1px s
 .newc .acts{display:flex;gap:8px;margin-top:10px}.newc .acts>*{flex:1;min-height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:800;font-size:14px;text-decoration:none}
 .newban{display:flex;align-items:center;gap:12px;background:#FFF1CC;color:#5A3B00;border-radius:18px;padding:12px 14px;margin:14px 16px 0;font-weight:700}
 .newban span{flex:1;line-height:1.45}
+/* packages */
+.pkcard{display:flex;align-items:center;gap:12px;width:100%;text-align:start;background:var(--card);border:1px solid var(--line);border-inline-start:6px solid var(--pc);border-radius:20px;padding:12px;margin-top:12px}
+.pkcard .dn,.pkhero .dn{width:62px;height:62px;border-radius:18px;background:var(--pc);color:#fff;display:grid;place-items:center;align-content:center;flex:none;line-height:1}
+.pkcard .dn b,.pkhero .dn b{font-size:26px}.pkcard .dn small,.pkhero .dn small{font-size:12px;font-weight:700}
+.pkcard .t{flex:1}.pkcard .t>b{display:block;font-size:18px;line-height:1.5}.pkcard .t>small{display:block;color:var(--mut);font-weight:600;font-size:13px;margin-bottom:6px}
+.pkcard em{font-style:normal;font-weight:800;font-size:17px;white-space:nowrap;align-self:flex-start;margin-top:6px}
+.pkhero{display:flex;align-items:center;gap:14px;margin:12px 16px 0;padding:16px;border-radius:22px;background:var(--pc);color:#fff}
+.pkhero .dn{background:#ffffff26;width:70px;height:70px}
+.pkhero>span:last-child b{display:block;font-size:28px;line-height:1.2}.pkhero>span:last-child small{opacity:.9;font-weight:600}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -645,12 +654,12 @@ V.reg=()=>{const sh=S.role==='shop';return `<div class="reghero"><img src="img/$
  <p class="note">${L('Aap ka account foran ban jayega aur dukaan ko khabar chali jayegi','آپ کا اکاؤنٹ فوراً بن جائے گا اور دکان کو خبر چلی جائے گی')}</p>
  <button type="button" class="demo-link" data-a="demoacc">${sh?L('Demo dukan (Bismillah Karyana) se dekhein','ڈیمو دکان (بسم اللہ کریانہ) سے دیکھیں'):L('Demo account (Asad Ali) se dekhein','ڈیمو اکاؤنٹ (اسد علی) سے دیکھیں')}</button></form>`};
 V.home=()=>{const sh=S.role==='shop';return `<div class="hero"><label class="search">${SRCH}<input id="q" type="search" autocomplete="off" placeholder="${sh?Lp('Thok saman dhoondein…','تھوک سامان ڈھونڈیں…'):Lp('Kya chahiye? Atta, ghee, anday…','کیا چاہیے؟ آٹا، گھی، انڈے…')}">${sh?'':`<button class="mic" data-a="voice" aria-label="voice">${MIC()}</button>`}</label></div><div id="res"></div><div id="hb">${sh?shopHome():custHome()}</div>`};
-function custHome(){return `${banners([['ban1','Ghar baithe raashan','گھر بیٹھے راشن','Haji Shah · Mansar · Gondal','حاجی شاہ · منصر · گوندل'],['ban2','Pardes se raashan','پردیس سے راشن','Dubai mein paise, ghar par saaman','دبئی میں پیسے، گھر پر سامان','go','pardes'],['ban3','Bol kar order karein','بول کر آرڈر کریں','Likhne ki zaroorat nahi','لکھنے کی ضرورت نہیں','voice']])}
+function custHome(){return `${banners([['ban1','Ghar baithe raashan','گھر بیٹھے راشن','Haji Shah · Mansar · Gondal','حاجی شاہ · منصر · گوندل'],['ban2','Raashan packages','راشن پیکج','10, 20 aur 30 din ka saman ek saath','10، 20 اور 30 دن کا سامان ایک ساتھ','go','pkgs'],['ban3','Bol kar order karein','بول کر آرڈر کریں','Likhne ki zaroorat nahi','لکھنے کی ضرورت نہیں','voice']])}
 <button class="voice" data-a="voice"><span class="m">${MIC('#fff')}</span><span><b>${L('Bol kar order karein','بول کر آرڈر کریں')}</b><small>${L('Button dabayein, apni zuban mein bolein','بٹن دبائیں، اپنی زبان میں بولیں')}</small></span></button>
 <div class="rates"><span class="lb">${L('Aaj ka rate','آج کا ریٹ')}</span><div class="tick"><div>${[0,1].map(()=>RATES.map(([id,d])=>{const v=vars(id)[0];return `<span>${Lp(ITEM(id).ro,ITEM(id).ur)} <em class="${d>0?'up':d<0?'dn':''}">${N(v.p)}/${Lp(v.ro,v.ur)} ${d>0?'▲':d<0?'▼':'•'}</em></span>`}).join('')).join('')}</div></div></div>
 <div class="sec"><div class="h"><h3>${L('Kya lena hai?','کیا لینا ہے؟')}</h3></div><div class="cats">${CATS.map(c=>`<button class="cat" data-a="cat" data-v="${c.id}"><span class="pl" style="background:${c.bg}">${art(c.a)}</span><span>${L(c.ro,c.ur)}</span></button>`).join('')}</div></div>
 <div class="sec"><button class="feat mo" data-a="monthly"><span class="stack">${['atta','ghee5','cheeni'].map(art).join('')}</span><span><b>${L('Mahine ka raashan','مہینے کا راشن')}</b><small>${L('Pichle mahine ki list, ek tap mein','پچھلے مہینے کی لسٹ، ایک ٹچ میں')}</small></span><span class="go">${N(MONTHLY.reduce((a,[k,q])=>a+price(k)*q,0))}</span></button></div>
-<div class="sec"><button class="feat pa" data-a="go" data-v="pardes"><span class="stack">${['chawal','oil','daal'].map(art).join('')}</span><span><b>${L('Pardes se raashan','پردیس سے راشن')}</b><small>${L('Dubai ya Saudia se ghar raashan bhejein','دبئی یا سعودیہ سے گھر راشن بھیجیں')}</small></span><span class="go">${L('Bhejein','بھیجیں')}</span></button></div>
+<div class="sec"><button class="feat pa" data-a="go" data-v="pkgs"><span class="stack">${['chawal','oil','daal'].map(art).join('')}</span><span><b>${L('Raashan packages','راشن پیکج')}</b><small>${L('10, 20 aur 30 din ka ghar ka saman','10، 20 اور 30 دن کا گھر کا سامان')}</small></span><span class="go">${L('Dekhein','دیکھیں')}</span></button></div>
 <div class="sec"><div class="h"><h3>${L('Sab se zyada bikne wali','سب سے زیادہ بکنے والی')}</h3><a data-a="cat" data-v="ration">${L('Sab dekhein','سب دیکھیں')}</a></div></div>
 <div class="hs">${['atta','ghee','anday','cheeni','chai','tamatar','teddy'].map((id,i)=>card(ITEM(id),i)).join('')}</div><p class="note">${L('Demo qeematein · asal rate dukaan se','ڈیمو قیمتیں · اصل ریٹ دکان سے')}</p>`}
 function shopHome(){const p=party(me()),s=stats(p.id);return `${banners([['ban3','Thok rates, seedha mart se','تھوک ریٹ، سیدھا مارٹ سے','Carton aur bori par bachat','کارٹن اور بوری پر بچت'],['ban1','60 din ka udhaar','60 دن کا ادھار','Poora hisaab app mein, har waqt','پورا حساب ایپ میں، ہر وقت','go','khata']])}
@@ -709,12 +718,20 @@ V.account=()=>{const p=party(me()),s=stats(p.id),E=ofP(p.id).filter(e=>e.k==='o'
  <div class="h" style="margin-top:14px"><h3>${L('Haal ke orders','حال کے آرڈر')}</h3><a data-a="go" data-v="orders">${L('Sab dekhein','سب دیکھیں')}</a></div>${E.length?E.map(e=>ordCard(e,false)).join(''):`<div class="empty">${L('Abhi koi order nahi. Ghar par ja kar shopping shuru karein','ابھی کوئی آرڈر نہیں۔ گھر پر جا کر شاپنگ شروع کریں')}</div>`}
  <div class="menu"><button data-a="go" data-v="khata"><span>${L('Mera khata','میرا کھاتہ')}</span><em>${N(s.bal)}</em></button><button data-a="lang"><span>${L('Zuban','زبان')}</span><em>${U()?'اردو':'Roman Urdu'}</em></button><button data-a="roles"><span>${L('Doosra app kholein','دوسری ایپ کھولیں')}</span><em>3 apps</em></button><button data-a="logout"><span style="color:var(--red)">${L('Account se bahar niklein','اکاؤنٹ سے باہر نکلیں')}</span><em>${L('Demo','ڈیمو')}</em></button></div></div>`};
 
-V.pardes=()=>{const PK=[['Chhota raashan','چھوٹا راشن','4 log · 1 mahina · 12 cheezein','4 لوگ · ایک مہینہ · 12 چیزیں',8500,['atta','ghee','cheeni']],['Bara raashan','بڑا راشن','6–7 log · 1 mahina · 20 cheezein','6 سے 7 لوگ · ایک مہینہ · 20 چیزیں',15500,['atta','chawal','ghee5']],['Ramzan package','رمضان پیکج','Besan, cheeni, tail aur mazeed','بیسن، چینی، تیل اور مزید',21000,['besan','oil','cheeni']]];S.pk=S.pk??1;
- return `${backB('home',L('Pardes se raashan','پردیس سے راشن'))}<div class="sec"><p style="margin:0;color:var(--mut);font-weight:600">${L('Aap bahar paise dein, hum ghar par saaman pohanchayein. Ghar walon ki tasveer ke saath WhatsApp par tasdeeq aayegi.','آپ باہر پیسے دیں، ہم گھر پر سامان پہنچائیں۔ گھر والوں کی تصویر کے ساتھ واٹس ایپ پر تصدیق آئے گی۔')}</p>
- <div class="h" style="margin-top:12px"><h3>1 · ${L('Package chunein','پیکج چنیں')}</h3></div>${PK.map(([r,u,r2,u2,pr,a],i)=>`<button class="prow" data-a="pk" data-v="${i}" style="${S.pk===i?'border:2px solid #1D4E89':''}"><span class="thumbs">${a.map(x=>`<span>${art(x)}</span>`).join('')}</span><span class="t"><b>${L(r,u)}</b><small>${L(r2,u2)}</small></span><em>${N(pr)}</em></button>`).join('')}
- <div class="h" style="margin-top:12px"><h3>2 · ${L('Ghar walon ki tafseel','گھر والوں کی تفصیل')}</h3></div>
- <label class="fld">${L('Naam','نام')}<input placeholder="Ammi jaan" autocomplete="off"></label><label class="fld">${L('Gaon','گاؤں')}<select>${VILL.map((v,i)=>`<option>${Lp(v,VU[i])}</option>`).join('')}</select></label>
- <button class="big" data-a="pardesok" style="background:#1D4E89;box-shadow:0 5px 0 #12345E">${L('Card se pay karein','کارڈ سے پے کریں')} · ${N(PK[S.pk][4])}</button><p class="note">${L('Demo: koi payment nahi hogi','ڈیمو: کوئی پیمنٹ نہیں ہوگی')}</p></div>`};
+const PKGS=[
+ {d:10,c:'#13704F',items:[['atta~20kg',1],['chawal~1kg',3],['cheeni~5kg',1],['ghee~2.5kg',1],['daal~1kg',2],['chai~430g',1],['doodh~1l',5],['anday~12',2],['aloo~5kg',1],['pyaz~5kg',1],['tamatar~1kg',3],['mirch~200g',1],['namak~800g',1],['sabun~3',1],['surf~1kg',1]]},
+ {d:20,c:'#B26A00',items:[['atta~20kg',2],['chawal~5kg',1],['cheeni~5kg',2],['ghee~5kg',1],['daal~5kg',1],['besan~1kg',1],['chai~430g',2],['doodh~6l',2],['anday~12',4],['aloo~5kg',2],['pyaz~5kg',2],['tamatar~5kg',1],['mirch~200g',2],['namak~800g',2],['biscuit~fam',2],['sabun~3',2],['surf~1kg',2],['bartan~3',1]]},
+ {d:30,c:'#1D4E89',items:[['atta~20kg',3],['chawal~5kg',2],['cheeni~10kg',1],['cheeni~5kg',1],['ghee5~5kg',1],['ghee~2.5kg',1],['oil~3l',1],['daal~5kg',1],['besan~1kg',2],['chai~950g',1],['doodh~6l',3],['anday~30',2],['aloo~5kg',3],['pyaz~5kg',3],['tamatar~5kg',1],['mirch~1kg',1],['namak~5x',1],['rusk~1kg',1],['biscuit~box',1],['sabun~12',1],['surf~3kg',1],['bartan~3',2]]}];
+const pkTotal=k=>k.items.reduce((a,[key,q])=>a+price(key)*q,0);
+V.pkgs=()=>`${backB('home',L('Raashan packages','راشن پیکج'))}<div class="sec"><p style="margin:0 0 6px;color:var(--mut);font-weight:600">${L('Ghar ki zaroori cheezein ek saath. Package chunein, dekhein aur tokri mein daalein.','گھر کی ضروری چیزیں ایک ساتھ۔ پیکج چنیں، دیکھیں اور ٹوکری میں ڈالیں۔')}</p>
+ ${PKGS.map((k,i)=>`<button class="pkcard" data-a="pkg" data-v="${i}" style="--pc:${k.c}"><span class="dn"><b>${k.d}</b><small>${L('din','دن')}</small></span><span class="t"><b>${L(k.d+' din ka raashan',k.d+' دن کا راشن')}</b><small>${k.items.length} ${L('cheezein · 5 se 7 log ka ghar','چیزیں · 5 سے 7 لوگوں کا گھر')}</small><span class="thumbs">${k.items.slice(0,5).map(([key])=>`<span>${art(PK(key).it.img)}</span>`).join('')}</span></span><em>${N(pkTotal(k))}</em></button>`).join('')}
+ <p class="note">${L('Demo qeematein · discount owner se pooch kar lagayenge','ڈیمو قیمتیں · ڈسکاؤنٹ مالک سے پوچھ کر لگائیں گے')}</p></div>`;
+V.pkg=()=>{const k=PKGS[S.pk||0],tot=pkTotal(k);return `${backB('pkgs',L(k.d+' din ka raashan',k.d+' دن کا راشن'))}
+ <div class="pkhero" style="--pc:${k.c}"><span class="dn"><b>${k.d}</b><small>${L('din','دن')}</small></span><span><b>${N(tot)}</b><small>${k.items.length} ${L('cheezein · 5 se 7 log ka ghar','چیزیں · 5 سے 7 لوگوں کا گھر')}</small></span></div>
+ <div class="sec"><div class="h"><h3>${L('Is package mein','اس پیکج میں')}</h3><small>${k.items.length}</small></div>
+ ${k.items.map(([key,q])=>{const{it,v}=PK(key);return `<div class="ci"><button class="pa" data-a="item" data-v="${it.id}" style="background:${it.bg}">${art(it.img)}</button><div class="t"><b>${nmI(it)}</b><small>${L(v.ro,v.ur)} · ${q} × ${N(v.p)}</small></div><b>${N(q*v.p)}</b></div>`}).join('')}
+ <div class="ibar"><div><small>${L('Kul','کل')}</small><b>${N(tot)}</b></div><button class="big" data-a="pkgadd">${L('Sab tokri mein daalein','سب ٹوکری میں ڈالیں')}</button></div>
+ <p class="note">${L('Tokri mein ja kar koi cheez kam ya zyada kar sakte hain · demo qeematein','ٹوکری میں جا کر کوئی چیز کم یا زیادہ کر سکتے ہیں · ڈیمو قیمتیں')}</p></div>`};
 
 /* owner */
 V.ohome=()=>{const ps=segP(),ids=ps.map(p=>p.id);let buy=0,paid=0;ids.forEach(i=>{const s=stats(i);buy+=s.buy;paid+=s.paid});const m=monthly(ids),cur=m.find(x=>x.ym===today().slice(0,7))||m[m.length-1]||{buy:0};
@@ -777,7 +794,7 @@ function tabs(){if(!S.role||S.view==='reg'){tabsEl.style.display='none';return}t
  const own=S.role==='owner',ids=own?segP().map(p=>p.id):[];
  const T=own?[['ohome','home','Home','ہوم'],['oorders','orders','Orders','آرڈر',DB.E.filter(e=>e.k==='o'&&e.st==='pending'&&ids.includes(e.pid)).length],['okhate','khata','Khate','کھاتے'],['orem','bell','Yaad-dihani','یاد دہانی',segP().filter(p=>stats(p.id).bal>0).length]]
   :[['home','home','Ghar','گھر'],['khata','khata','Khata','کھاتہ'],['cart','','Tokri','ٹوکری',count()],['orders','orders','Orders','آرڈر'],['account','account','Account','اکاؤنٹ']];
- const map={cat:'home',pardes:'home',item:'home',order:'orders',oparty:'okhate'};const cur=map[S.view]||S.view;
+ const map={cat:'home',pkgs:'home',pkg:'home',item:'home',order:'orders',oparty:'okhate'};const cur=map[S.view]||S.view;
  tabsEl.style.gridTemplateColumns=`repeat(${T.length},minmax(0,1fr))`;
  tabsEl.innerHTML=T.map(([k,ic,r,u,b])=>k==='cart'?`<button class="tab mid ${cur===k?'on':''}" data-a="go" data-v="cart" id="cartTab"><span class="c"><svg viewBox="0 0 24 24" width="28" height="28"><path d="M3 4h3l2.5 11h10L21 8H7.5" fill="none" stroke="#083D2F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="19.5" r="1.8" fill="#083D2F"/><circle cx="17" cy="19.5" r="1.8" fill="#083D2F"/></svg><span class="badge" id="badge">${b||''}</span></span><span>${L(r,u)}</span></button>`
   :`<button class="tab ${cur===k?'on':''}" data-a="go" data-v="${k}"><span class="ib"><svg viewBox="0 0 24 24" fill="currentColor">${TI[ic]}</svg>${b?`<span class="badge">${b}</span>`:''}</span><span>${L(r,u)}</span></button>`).join('')}
@@ -877,8 +894,8 @@ const A={
   DB.E.push({id:DB.next++,pid:S.pp.pid,k:'p',d:today(),amt,m:S.pp.m});save();closeS();toast(Lp(`${N(amt)} darj ho gaye`,`${N(amt)} درج ہو گئے`));render(true)},
  stmt:v=>stmtSheet(v),
  share:v=>{share(v)},
- pk:v=>{S.pk=+v;render(true)},
- pardesok:()=>sheet(`<div class="grab"></div><svg class="okart" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#1D4E89"/><path class="ck" d="M32 51l12 12 24-26" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/></svg><h3>${L('Raashan book ho gaya!','راشن بک ہو گیا!')}</h3><p>${L('Delivery par ghar walon ki tasveer ke saath WhatsApp par tasdeeq aayegi','ڈلیوری پر گھر والوں کی تصویر کے ساتھ واٹس ایپ پر تصدیق آئے گی')}</p><button class="big" data-a="close">OK</button>`)};
+ pkg:v=>{S.pk=+v;go('pkg')},
+ pkgadd:(v,el)=>{const c=cart();PKGS[S.pk||0].items.forEach(([k,q])=>c[k]=(c[k]||0)+q);fly(el);toast(Lp('Package tokri mein daal diya','پیکج ٹوکری میں ڈال دیا'));setTimeout(()=>go('cart'),700)}};
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(f){e.preventDefault();f(el.dataset.v,el)}});
 
 /* routing + sync between tabs */
