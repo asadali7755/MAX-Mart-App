@@ -441,9 +441,9 @@ const VILLU=['حاجی شاہ','منصر کیمپ','گوندل','قاضی آبا
 const MONTHLY=[['atta',2],['chawal',1],['cheeni',5],['ghee5',1],['daal',2],['chai',1],['sabun',4],['surf',1]];
 const RATES=[['atta',-1],['cheeni',1],['ghee',-1],['anday',1],['doodh',0],['tamatar',-1],['pyaz',1]];
 const PKG=[
- {ur:'چھوٹا راشن',en:'Small ration',sub:['4 لوگ · ایک مہینہ · 12 چیزیں','4 people · 1 month · 12 items'],p:8500,a:['atta','ghee','cheeni']},
- {ur:'بڑا راشن',en:'Family ration',sub:['6 سے 7 لوگ · ایک مہینہ · 20 چیزیں','6–7 people · 1 month · 20 items'],p:15500,a:['atta','chawal','ghee5','daal']},
- {ur:'رمضان پیکج',en:'Ramzan pack',sub:['کھجور، بیسن، چینی، تیل اور مزید','Dates, besan, sugar, oil and more'],p:21000,a:['besan','oil','cheeni','chai']}];
+ {ur:'چھوٹا راشن',en:'Small ration',ro:'Chhota raashan',sub:['4 لوگ · ایک مہینہ · 12 چیزیں','4 people · 1 month · 12 items','4 log · 1 mahina · 12 cheezein'],p:8500,a:['atta','ghee','cheeni']},
+ {ur:'بڑا راشن',en:'Family ration',ro:'Bara raashan',sub:['6 سے 7 لوگ · ایک مہینہ · 20 چیزیں','6–7 people · 1 month · 20 items','6–7 log · 1 mahina · 20 cheezein'],p:15500,a:['atta','chawal','ghee5','daal']},
+ {ur:'رمضان پیکج',en:'Ramzan pack',ro:'Ramzan package',sub:['کھجور، بیسن، چینی، تیل اور مزید','Dates, besan, sugar, oil and more','Khajoor, besan, cheeni, tail aur mazeed'],p:21000,a:['besan','oil','cheeni','chai']}];
 
 /* ---------- words ---------- */
 const T={
@@ -477,18 +477,25 @@ const T={
  newo:['نئے آرڈر','New orders'],acc:['قبول','Accept'],pack:['پیکنگ','Packing'],byv:['گاؤں کے حساب سے آرڈر','Orders by village'],
  lowS:['سٹاک ختم ہو رہا ہے','Running low'],left:['باقی','left'],udh:['ادھار وصولی','Udhaar recovery'],remS:['یاد دہانی','Remind'],remOK:['واٹس ایپ یاد دہانی بھیج دی (ڈیمو)','WhatsApp reminder sent (demo)'],
  orderMore:['اور منگوائیں','Order more']};
-const S={lang:'en',view:'home',cat:null,cart:{},v:1,slot:0,pay:'cash',pkg:1,ppay:'card',rem:true,bal:7450,orders:[
+const S={lang:'ro',view:'home',cat:null,cart:{},v:1,slot:0,pay:'cash',pkg:1,ppay:'card',rem:true,bal:7450,orders:[
  {id:1042,n:'Riaz Ahmed',v:1,i:9,a:4320,st:0},{id:1043,n:'Nasreen Bibi',v:0,i:4,a:1180,st:0},{id:1044,n:'Gul Khan',v:2,i:14,a:7650,st:1},{id:1045,n:'Shabana',v:3,i:6,a:2240,st:0}]};
-const L=k=>T[k][S.lang==='ur'?0:1];
+const RO={search:'Kya chahiye? Atta, ghee, anday…',voice:'Bol kar order karein',voiceS:'Button dabayein, apni zuban mein bolein',rate:'Aaj ka rate',cats:'Kya lena hai?',mo:'Mahine ka raashan',moS:'Pichle mahine ki list, ek tap mein',moGo:'Sab mangwayein',pa:'Pardes se raashan',paS:'Dubai ya Saudia se ghar raashan bhejein',paGo:'Bhejein',pop:'Sab se zyada bikne wali',all:'Sab dekhein',home:'Ghar',khata:'Khata',cart:'Tokri',pardes:'Pardes',owner:'Dukandar',empty:'Aap ki tokri khaali hai',shop:'Shopping shuru karein',vil:'Kis gaon mein?',slot:'Kab chahiye?',s1:'Aaj subah 11 baje',s2:'Aaj shaam 5 baje',payw:'Paise kaise denge?',cash:'Ghar par naqad',onk:'Khate mein likhein',sub:'Cheezon ki qeemat',free:'Muft',tot:'Kul raqam',place:'Order karein',freeNote:'Rs 2,000 se zyada par delivery muft',demo:'Demo qeematein · asal rate dukaan se',got:'Order mil gaya!',t1:'Order mil gaya',t2:'Saaman pack ho raha hai',t3:'Rider raaste mein hai',t4:'Ghar pohanch gaya',backHome:'Wapis ghar',bal:'Aap ka baqi khata',due:'Adaigi ki tareekh: 1 December',lim:'Had',payE:'Easypaisa se dein',payJ:'JazzCash se dein',rem:'Har mahine WhatsApp par yaad-dihani',hist:'Khate ki tafseel',paid:'Adaigi ho gayi (demo)',paH:'Pardes se ghar raashan',paH2:'Aap bahar paise dein, hum ghar par saaman pohanchayein',pk:'Package chunein',who:'Ghar walon ki tafseel',fn:'Naam',card:'Debit ya credit card',sendR:'Raashan bhejein',paOK:'Raashan book ho gaya!',paOK2:'Delivery par ghar walon ki tasveer ke saath WhatsApp par tasdeeq aayegi',vT:'Bolein, hum sun rahe hain',vTap:'Mic dabayein',vAdd:'Tokri mein daalein',vNote:'Demo: asal app mein WhatsApp voice note se bhi order hoga',added:'Tokri mein daal diya',oH:'Dukandar panel',oS:'Aaj ka hisaab · demo data',k1:'Aaj ki sale',k2:'Aaj ke order',k3:'Kul udhaar baqi',k4:'Is mahine wasooli',newo:'Naye order',acc:'Qubool',byv:'Gaon ke hisaab se order',lowS:'Stock khatam ho raha hai',left:'baqi',udh:'Udhaar wasooli',remS:'Yaad karayein',remOK:'WhatsApp yaad-dihani bhej di (demo)',
+b1:'Ghar baithe raashan',b2:'Pardes se raashan',b2s:'Dubai mein paise, ghar par saaman',b3:'Bolein aur order karein',b3s:'Likhne ki zaroorat nahi',fd:'Delivery muft',tryit:'Azmayein',items:'cheezein',vy:'kal se',days:'din',res:'nataij',nf:'Kuch nahi mila, bol kar batayein',dd:'Demo data',newc:'Naya customer',pts:'Bachat points',orderMore:'Aur mangwayein'};
+Object.assign(T,{b1:['گھر بیٹھے راشن','Ration at your door'],b2:['پردیس سے راشن','Ration from abroad'],b2s:['دبئی سے پیسے، گھر پر سامان','Pay in Dubai, delivered at home'],b3:['بولیں اور آرڈر کریں','Just speak to order'],b3s:['لکھنے کی ضرورت نہیں','No typing needed'],fd:['ڈلیوری مفت','Free delivery'],tryit:['آزمائیں','Try it'],items:['چیزیں','items'],vy:['کل سے','vs yesterday'],days:['دن','days'],res:['نتائج','results'],nf:['کچھ نہیں ملا، بول کر بتائیں','Nothing found. Try speaking instead'],dd:['ڈیمو ڈیٹا','Demo data'],newc:['نیا گاہک','New customer']});
+const L=k=>S.lang==='ur'?T[k][0]:S.lang==='ro'?(RO[k]||T[k][1]):T[k][1];
+const PRO={atta:'Chakki Atta',chawal:'Basmati Chawal',cheeni:'Cheeni',besan:'Besan',ghee:'Banaspati Ghee',oil:'Cooking Oil',ghee5:'Ghee ka Bara Dabba',doodh:'Doodh',anday:'Anday',dahi:'Dahi',tamatar:'Tamatar',pyaz:'Pyaz',aloo:'Aloo',chai:'Chai ki Patti',biscuit:'Biscuit',rusk:'Rus',daal:'Daal Masoor',mirch:'Lal Mirch',namak:'Namak',sabun:'Nahane ka Sabun',surf:'Surf',bartan:'Bartan ki Tikiya',car:'Khilona Gari',teddy:'Teddy Bear',ball:'Football'};
+const CRO={ration:'Atta aur Chawal',ghee:'Ghee aur Tail',dairy:'Doodh Anday',sabzi:'Sabzi',chai:'Chai Biscuit',masala:'Daal Masalay',safai:'Safai',toys:'Khilonay'};
+const pn=p=>S.lang==='ur'?p.ur:S.lang==='ro'?PRO[p.id]:p.en;
+const cn=c=>S.lang==='ur'?c.ur:S.lang==='ro'?CRO[c.id]:c.en;
 const N=n=>'Rs '+n.toLocaleString('en-IN');
 const isU=()=>S.lang==='ur';
-const nm=p=>isU()?`<span class="ur">${p.ur}</span>`:p.en;
+const nm=p=>isU()?`<span class="ur">${p.ur}</span>`:pn(p);
 const $=s=>document.querySelector(s);
 const app=$('#app'),view=$('#view');
 
 /* ---------- pieces ---------- */
 const qtyC=p=>{const q=S.cart[p.id]||0;return q?`<div class="qty"><button data-a="dec" data-v="${p.id}" aria-label="minus">−</button><span>${q}</span><button data-a="add" data-v="${p.id}" aria-label="plus">+</button></div>`:`<button class="addb" data-a="add" data-v="${p.id}" aria-label="add ${p.en}">+</button>`};
-const card=(p,i=0)=>`<div class="pc" style="animation-delay:${i*40}ms"><div class="pa" style="background:${bgOf(p)}">${p.a()}</div>${p.o?`<span class="off">-${Math.round((1-p.p/p.o)*100)}%</span>`:''}<div class="nm">${nm(p)}</div><div class="en">${isU()?p.en+' · ':''}${p.u}</div><div class="pr"><div><b>${N(p.p)}</b>${p.o?`<s>${N(p.o)}</s>`:''}</div>${qtyC(p)}</div></div>`;
+const card=(p,i=0)=>`<div class="pc" style="animation-delay:${i*40}ms"><div class="pa" style="background:${bgOf(p)}">${p.a()}</div>${p.o?`<span class="off">-${Math.round((1-p.p/p.o)*100)}%</span>`:''}<div class="nm">${nm(p)}</div><div class="en">${S.lang!=='en'&&!isU()?p.en+' · ':isU()?p.en+' · ':''}${p.u}</div><div class="pr"><div><b>${N(p.p)}</b>${p.o?`<s>${N(p.o)}</s>`:''}</div>${qtyC(p)}</div></div>`;
 const count=()=>Object.values(S.cart).reduce((a,b)=>a+b,0);
 const subT=()=>Object.entries(S.cart).reduce((a,[id,q])=>a+PB[id].p*q,0);
 
@@ -502,15 +509,15 @@ V.home=()=>`
 <div id="res"></div>
 <div id="homeBody">
 <div class="ban" id="ban">
- <div class="slide">${scene1}<div class="tx">${isU()?`<span class="ur">گھر بیٹھے راشن</span><span class="ur" style="font-size:14px">حاجی شاہ · منصر · گوندل</span>`:`<b>Ration at your door</b><span>Haji Shah · Mansar · Gondal</span>`}<span class="tag">${isU()?'ڈلیوری مفت':'Free delivery'}</span></div></div>
- <div class="slide">${scene2}<div class="tx">${isU()?`<span class="ur">پردیس سے راشن</span><span class="ur" style="font-size:14px">دبئی سے پیسے، گھر پر سامان</span>`:`<b>Ration from abroad</b><span>Pay in Dubai, delivered at home</span>`}<span class="tag" data-a="go" data-v="pardes">${L('paGo')}</span></div></div>
- <div class="slide">${scene3}<div class="tx">${isU()?`<span class="ur">بولیں اور آرڈر کریں</span><span class="ur" style="font-size:14px">لکھنے کی ضرورت نہیں</span>`:`<b>Just speak to order</b><span>No typing needed</span>`}<span class="tag" data-a="voice">${isU()?'آزمائیں':'Try it'}</span></div></div>
+ <div class="slide">${scene1}<div class="tx">${isU()?`<span class="ur">گھر بیٹھے راشن</span><span class="ur" style="font-size:14px">حاجی شاہ · منصر · گوندل</span>`:`<b>${L('b1')}</b><span>Haji Shah · Mansar · Gondal</span>`}<span class="tag">${isU()?`<span class="ur">${L('fd')}</span>`:L('fd')}</span></div></div>
+ <div class="slide">${scene2}<div class="tx">${isU()?`<span class="ur">پردیس سے راشن</span><span class="ur" style="font-size:14px">دبئی سے پیسے، گھر پر سامان</span>`:`<b>${L('b2')}</b><span>${L('b2s')}</span>`}<span class="tag" data-a="go" data-v="pardes">${L('paGo')}</span></div></div>
+ <div class="slide">${scene3}<div class="tx">${isU()?`<span class="ur">بولیں اور آرڈر کریں</span><span class="ur" style="font-size:14px">لکھنے کی ضرورت نہیں</span>`:`<b>${L('b3')}</b><span>${L('b3s')}</span>`}<span class="tag" data-a="voice">${L('tryit')}</span></div></div>
 </div>
 <div class="dots" id="dots"><i class="on"></i><i></i><i></i></div>
 <button class="voice" data-a="voice"><span class="m"><svg width="30" height="30" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="12" rx="4" fill="#fff"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></span><span>${isU()?`<span class="ur" style="display:block;font-weight:700">${L('voice')}</span><small class="ur">${L('voiceS')}</small>`:`<b>${L('voice')}</b><small>${L('voiceS')}</small>`}</span></button>
-<div class="rates"><span class="lb ${isU()?'ur':''}">${L('rate')}</span><div class="tick"><div>${[0,1].map(()=>RATES.map(([id,d])=>`<span>${isU()?PB[id].ur:PB[id].en} <em class="${d>0?'up':d<0?'dn':''}">${N(PB[id].p)} ${d>0?'▲':d<0?'▼':'•'}</em></span>`).join('')).join('')}</div></div></div>
+<div class="rates"><span class="lb ${isU()?'ur':''}">${L('rate')}</span><div class="tick"><div>${[0,1].map(()=>RATES.map(([id,d])=>`<span>${pn(PB[id])} <em class="${d>0?'up':d<0?'dn':''}">${N(PB[id].p)} ${d>0?'▲':d<0?'▼':'•'}</em></span>`).join('')).join('')}</div></div></div>
 <div class="sec"><div class="h"><h3 class="${isU()?'ur':''}">${L('cats')}</h3></div>
-<div class="cats">${CATS.map(c=>`<button class="cat" data-a="cat" data-v="${c.id}"><span class="pl" style="background:${c.bg}">${art(c.a)}</span><span class="ur">${c.ur}</span><small>${c.en}</small></button>`).join('')}</div></div>
+<div class="cats">${CATS.map(c=>`<button class="cat" data-a="cat" data-v="${c.id}"><span class="pl" style="background:${c.bg}">${art(c.a)}</span><span class="ur">${c.ur}</span><small>${S.lang==='ro'?CRO[c.id]:c.en}</small></button>`).join('')}</div></div>
 <div class="sec"><button class="feat mo" data-a="monthly"><span class="stack">${['atta','ghee5','cheeni'].map(art).join('')}</span><span>${isU()?`<span class="ur" style="display:block;font-weight:700">${L('mo')}</span>`:`<b>${L('mo')}</b>`}<small class="${isU()?'ur':''}">${L('moS')}</small></span><span class="go">${N(MONTHLY.reduce((a,[id,q])=>a+PB[id].p*q,0))}</span></button></div>
 <div class="sec"><button class="feat pa" data-a="go" data-v="pardes"><span class="stack">${['chawal','oil','daal'].map(art).join('')}</span><span>${isU()?`<span class="ur" style="display:block;font-weight:700">${L('pa')}</span>`:`<b>${L('pa')}</b>`}<small class="${isU()?'ur':''}">${L('paS')}</small></span><span class="go">${L('paGo')}</span></button></div>
 <div class="sec"><div class="h"><h3 class="${isU()?'ur':''}">${L('pop')}</h3><a data-a="cat" data-v="ration">${L('all')}</a></div></div>
@@ -518,9 +525,9 @@ V.home=()=>`
 <p class="note">${L('demo')}</p></div>`;
 
 V.cat=()=>{const c=CATS.find(x=>x.id===S.cat);return `
-<div class="back"><button data-a="go" data-v="home" aria-label="back"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h2>${isU()?`<span class="ur">${c.ur}</span>`:c.en}</h2></div>
-<div class="catban" style="background:${c.bg}"><div><b class="${isU()?'ur':''}">${isU()?c.ur:c.en}</b><small>${P.filter(p=>p.c===c.id).length} ${isU()?'چیزیں':'items'}</small></div>${art(c.a)}</div>
-<div class="sec"><div class="chips" style="flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px">${CATS.map(x=>`<button class="chip ${x.id===c.id?'on':''}" data-a="cat" data-v="${x.id}" style="white-space:nowrap">${isU()?`<span class="ur">${x.ur}</span>`:x.en}</button>`).join('')}</div></div>
+<div class="back"><button data-a="go" data-v="home" aria-label="back"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h2>${isU()?`<span class="ur">${c.ur}</span>`:cn(c)}</h2></div>
+<div class="catban" style="background:${c.bg}"><div><b class="${isU()?'ur':''}">${cn(c)}</b><small>${P.filter(p=>p.c===c.id).length} ${L('items')}</small></div>${art(c.a)}</div>
+<div class="sec"><div class="chips" style="flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px">${CATS.map(x=>`<button class="chip ${x.id===c.id?'on':''}" data-a="cat" data-v="${x.id}" style="white-space:nowrap">${isU()?`<span class="ur">${x.ur}</span>`:cn(x)}</button>`).join('')}</div></div>
 <div class="sec"><div class="grid">${P.filter(p=>p.c===c.id).map(card).join('')}</div></div>
 <p class="note">${L('demo')}</p>`};
 
@@ -546,16 +553,16 @@ V.track=()=>`<div class="sec" style="text-align:center"><svg class="okart" viewB
 <div class="sec"><ul class="steps" id="steps">${['t1','t2','t3','t4'].map((k,i)=>`<li class="${i===0?'on':''}"><i>${i+1}</i><span class="${isU()?'ur':''}">${L(k)}</span></li>`).join('')}</ul>
 <button class="big y" data-a="go" data-v="home">${isU()?`<span class="ur">${L('backHome')}</span>`:L('backHome')}</button></div>`;
 
-V.khata=()=>`<div class="kc"><small class="${isU()?'ur':''}">${L('bal')}</small><div class="amt">${N(S.bal)}</div><small class="${isU()?'ur':''}">${L('due')}</small><div class="bar"><i style="width:${Math.min(100,S.bal/15000*100)}%"></i></div><div class="meta"><span>${L('lim')}: ${N(15000)}</span><span>${isU()?'بچت پوائنٹس':'Bachat points'}: 320</span></div></div>
+V.khata=()=>`<div class="kc"><small class="${isU()?'ur':''}">${L('bal')}</small><div class="amt">${N(S.bal)}</div><small class="${isU()?'ur':''}">${L('due')}</small><div class="bar"><i style="width:${Math.min(100,S.bal/15000*100)}%"></i></div><div class="meta"><span>${L('lim')}: ${N(15000)}</span><span>${L('pts')}: 320</span></div></div>
 <div class="sec"><div class="two"><button class="big" data-a="paykhata" style="background:#2FA84F;box-shadow:0 6px 0 #1E7A37">${isU()?`<span class="ur">${L('payE')}</span>`:L('payE')}</button><button class="big" data-a="paykhata" style="background:#E2231A;box-shadow:0 6px 0 #A8140E">${isU()?`<span class="ur">${L('payJ')}</span>`:L('payJ')}</button></div>
 <button class="toggle ${S.rem?'on':''}" data-a="rem"><svg width="30" height="30" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#25D366"/><path d="M7 17l1-3a5 5 0 1 1 2 2z" fill="#fff"/></svg><span class="${isU()?'ur':''}">${L('rem')}</span><span class="sw"></span></button>
 <div class="h" style="margin-top:16px"><h3 class="${isU()?'ur':''}">${L('hist')}</h3></div>
-<div class="hist">${[['آٹا، گھی، چینی','Atta, ghee, sugar','18 Nov',2860,0],['ایزی پیسہ ادائیگی','Easypaisa payment','12 Nov',3000,1],['دودھ، انڈے، ڈبل روٹی','Milk, eggs, bread','9 Nov',940,0],['مہینے کا راشن','Monthly ration','2 Nov',6650,0],['نقد ادائیگی','Cash payment','1 Nov',5000,1]].map(([u,e,d,a,pd])=>`<div><svg width="38" height="38" viewBox="0 0 38 38"><circle cx="19" cy="19" r="19" fill="${pd?'#DFF3E6':'#FFE9DF'}"/><path d="${pd?'M19 26V12M13 18l6-6 6 6':'M19 12v14M13 20l6 6 6-6'}" stroke="${pd?'#1F9254':'#D23B26'}" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>${isU()?`<span class="ur">${u}</span>`:e}<small>${d}</small></b><em class="${pd?'dn':'up'}">${pd?'−':'+'} ${N(a)}</em></div>`).join('')}</div>
-<p class="note">${isU()?'<span class="ur">ڈیمو ڈیٹا</span>':'Demo data'}</p></div>`;
+<div class="hist">${[['آٹا، گھی، چینی','Atta, ghee, sugar','18 Nov',2860,0,'Atta, ghee, cheeni'],['ایزی پیسہ ادائیگی','Easypaisa payment','12 Nov',3000,1,'Easypaisa adaigi'],['دودھ، انڈے، ڈبل روٹی','Milk, eggs, bread','9 Nov',940,0,'Doodh, anday, double roti'],['مہینے کا راشن','Monthly ration','2 Nov',6650,0,'Mahine ka raashan'],['نقد ادائیگی','Cash payment','1 Nov',5000,1,'Naqad adaigi']].map(([u,e0,d,a,pd,r])=>[u,S.lang==='ro'?r:e0,d,a,pd]).map(([u,e,d,a,pd])=>`<div><svg width="38" height="38" viewBox="0 0 38 38"><circle cx="19" cy="19" r="19" fill="${pd?'#DFF3E6':'#FFE9DF'}"/><path d="${pd?'M19 26V12M13 18l6-6 6 6':'M19 12v14M13 20l6 6 6-6'}" stroke="${pd?'#1F9254':'#D23B26'}" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>${isU()?`<span class="ur">${u}</span>`:e}<small>${d}</small></b><em class="${pd?'dn':'up'}">${pd?'−':'+'} ${N(a)}</em></div>`).join('')}</div>
+<p class="note">${isU()?`<span class="ur">${L('dd')}</span>`:L('dd')}</p></div>`;
 
 V.pardes=()=>{const pk=PKG[S.pkg];return `<div class="ban" style="padding-bottom:0"><div class="slide">${scene2}<div class="tx">${isU()?`<span class="ur">${L('paH')}</span><span class="ur" style="font-size:13px;line-height:1.9">${L('paH2')}</span>`:`<b>${L('paH')}</b><span>${L('paH2')}</span>`}</div></div></div>
 <div class="sec"><div class="h"><h3 class="${isU()?'ur':''}">1 · ${L('pk')}</h3></div>
-<div class="pk">${PKG.map((k,i)=>`<button class="pkc ${S.pkg===i?'on':''}" data-a="pkg" data-v="${i}"><span class="stack">${k.a.map(art).join('')}</span><span>${isU()?`<b class="ur">${k.ur}</b><small class="ur">${k.sub[0]}</small>`:`<b>${k.en}</b><small>${k.sub[1]}</small>`}</span><em>${N(k.p)}</em></button>`).join('')}</div>
+<div class="pk">${PKG.map((k,i)=>`<button class="pkc ${S.pkg===i?'on':''}" data-a="pkg" data-v="${i}"><span class="stack">${k.a.map(art).join('')}</span><span>${isU()?`<b class="ur">${k.ur}</b><small class="ur">${k.sub[0]}</small>`:`<b>${S.lang==='ro'?k.ro:k.en}</b><small>${k.sub[S.lang==='ro'?2:1]}</small>`}</span><em>${N(k.p)}</em></button>`).join('')}</div>
 <form id="pform"><div class="h" style="margin-top:16px"><h3 class="${isU()?'ur':''}">2 · ${L('who')}</h3></div>
 <label class="fld"><span class="${isU()?'ur':''}">${L('fn')}</span><input id="fname" placeholder="Ammi jaan" autocomplete="off"></label>
 <label class="fld"><span class="${isU()?'ur':''}">${L('fp')}</span><input id="fphone" inputmode="tel" placeholder="03xx xxxxxxx" autocomplete="off"></label>
@@ -566,15 +573,15 @@ V.pardes=()=>{const pk=PKG[S.pkg];return `<div class="ban" style="padding-bottom
 <p class="note">${L('demo')}</p></div>`};
 
 V.owner=()=>`<div class="ow"><h2 class="${isU()?'ur':''}">${L('oH')}</h2><small class="${isU()?'ur':''}">${L('oS')}</small>
-<div class="kpi">${[['k1',N(48250),'+12%'],['k2','37','+5'],['k3',N(186400),''],['k4',N(62300),'']].map(([k,v,e])=>`<div><small class="${isU()?'ur':''}">${L(k)}</small><b>${v}</b>${e?`<em>${e} ${isU()?'کل سے':'vs yesterday'}</em>`:''}</div>`).join('')}</div></div>
+<div class="kpi">${[['k1',N(48250),'+12%'],['k2','37','+5'],['k3',N(186400),''],['k4',N(62300),'']].map(([k,v,e])=>`<div><small class="${isU()?'ur':''}">${L(k)}</small><b>${v}</b>${e?`<em>${e} ${L('vy')}</em>`:''}</div>`).join('')}</div></div>
 <div class="sec"><div class="h"><h3 class="${isU()?'ur':''}">${L('newo')}</h3></div>
-${S.orders.map((o,i)=>`<div class="oc"><span class="av">${o.n[0]}</span><div class="t"><b>${o.n} · #${o.id}</b><small>${isU()?`<span class="ur">${VILLU[o.v]}</span>`:VILL[o.v]} · ${o.i} ${isU()?'چیزیں':'items'} · ${N(o.a)}</small></div><button class="${o.st?'done':''}" data-a="acc" data-v="${i}">${o.st?L('pack'):L('acc')}</button></div>`).join('')}
+${S.orders.map((o,i)=>`<div class="oc"><span class="av">${o.n[0]}</span><div class="t"><b>${o.n} · #${o.id}</b><small>${isU()?`<span class="ur">${VILLU[o.v]}</span>`:VILL[o.v]} · ${o.i} ${L('items')} · ${N(o.a)}</small></div><button class="${o.st?'done':''}" data-a="acc" data-v="${i}">${o.st?L('pack'):L('acc')}</button></div>`).join('')}
 <div class="h" style="margin-top:14px"><h3 class="${isU()?'ur':''}">${L('byv')}</h3></div>
 <div class="vb">${[14,9,6,5,3].map((n,i)=>`<div><span>${isU()?`<span class="ur" style="font-size:13px">${VILLU[i]}</span>`:VILL[i]}</span><i style="width:${n/14*100}%"></i><em>${n}</em></div>`).join('')}</div>
 <div class="h" style="margin-top:14px"><h3 class="${isU()?'ur':''}">${L('lowS')}</h3></div>
 ${[['cheeni',6,'bags'],['anday',3,'trays'],['ghee5',4,'tins']].map(([id,n,u])=>`<div class="low">${art(id)}<span>${nm(PB[id])}</span><em>${n} ${u} ${L('left')}</em></div>`).join('')}
 <div class="h" style="margin-top:14px"><h3 class="${isU()?'ur':''}">${L('udh')}</h3></div>
-${[['Zahid Hussain',12400,34],['Parveen',8750,21],['Haji Akram',15000,40]].map(([n,a,d])=>`<div class="oc"><span class="av">${n[0]}</span><div class="t"><b>${n}</b><small>${N(a)} · ${d} ${isU()?'دن':'days'}</small></div><button data-a="remind" style="background:#25D366">${L('remS')}</button></div>`).join('')}
+${[['Zahid Hussain',12400,34],['Parveen',8750,21],['Haji Akram',15000,40]].map(([n,a,d])=>`<div class="oc"><span class="av">${n[0]}</span><div class="t"><b>${n}</b><small>${N(a)} · ${d} ${L('days')}</small></div><button data-a="remind" style="background:#25D366">${L('remS')}</button></div>`).join('')}
 </div>`;
 
 /* ---------- render ---------- */
@@ -584,7 +591,7 @@ function tabs(){$('#tabs').innerHTML=TABS.map(([k,d])=>{const on=(S.view===k)||(
  return `<button class="tab ${on?'on':''}" data-a="go" data-v="${k}"><svg viewBox="0 0 24 24" fill="currentColor">${d}</svg><span class="${isU()?'ur':''}">${L(k)}</span></button>`}).join('')}
 let banT;
 function render(keep){app.dir=isU()?'rtl':'ltr';document.documentElement.lang=isU()?'ur':'en';
- $('#langb').textContent=isU()?'EN':'اردو';$('#q').placeholder=L('search');
+ $('#langb').textContent=S.lang==='ro'?'اردو':S.lang==='ur'?'EN':'Roman';$('#langb').setAttribute('aria-label','Change language');$('#q').placeholder=L('search');
  $('#vsel').innerHTML=VILL.map((v,i)=>`<option value="${i}" ${i===S.v?'selected':''}>${isU()?VILLU[i]:v}</option>`).join('');
  const top=view.scrollTop;view.innerHTML=V[S.view]();if(keep)view.scrollTop=top;else view.scrollTop=0;tabs();
  if(S.view==='home')startBan();else clearInterval(banT);
@@ -613,7 +620,7 @@ function refreshQty(){if(S.view==='cart'){render(true);return}
 /* voice demo */
 function voice(){sheet(`<div class="grab"></div><h3 class="${isU()?'ur':''}">${L('vTap')}</h3><button class="bigmic" id="bm" data-a="listen" aria-label="mic"><svg width="56" height="56" viewBox="0 0 24 24"><rect x="8" y="3" width="8" height="12" rx="4" fill="#fff"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></button><div class="wave" id="wv">${'<i></i>'.repeat(7)}</div><div class="said ur" id="said"></div><div id="vres"></div><p class="note ${isU()?'ur':''}">${L('vNote')}</p>`)}
 function listen(){const bm=$('#bm'),wv=$('#wv'),said=$('#said');if(!bm||bm.classList.contains('live'))return;bm.classList.add('live');wv.classList.add('live');$('#sheet h3').textContent=L('vT');
- const txt='دو کلو چینی، ایک گھی کا ڈبہ، اور ایک درجن انڈے';let i=0;said.textContent='';
+ const txt=isU()?'دو کلو چینی، ایک گھی کا ڈبہ، اور ایک درجن انڈے':'Do kilo cheeni, ek ghee ka dabba, aur ek darjan anday';said.className=isU()?'said ur':'said';let i=0;said.textContent='';
  const iv=setInterval(()=>{said.textContent=txt.slice(0,++i);if(i>=txt.length){clearInterval(iv);bm.classList.remove('live');wv.classList.remove('live');
   const items=[['cheeni',2],['ghee',1],['anday',1]];
   $('#vres').innerHTML=`<div style="margin-top:12px">${items.map(([id,q])=>{const p=PB[id];return `<div class="ci"><div class="pa" style="background:${bgOf(p)}">${p.a()}</div><div class="t"><b>${nm(p)}</b><small>${q} × ${N(p.p)}</small></div><b>${N(q*p.p)}</b></div>`}).join('')}</div><button class="big" data-a="vadd">${isU()?`<span class="ur">${L('vAdd')}</span>`:L('vAdd')}</button>`}},55)}
@@ -624,9 +631,9 @@ const A={
  cat:v=>{S.cat=v;S.view='cat';history.replaceState(null,'','#cat-'+v);render()},
  add:(v,el)=>{S.cart[v]=(S.cart[v]||0)+1;if(S.cart[v]===1)fly(el);else bump();refreshQty()},
  dec:v=>{S.cart[v]=(S.cart[v]||0)-1;if(S.cart[v]<=0)delete S.cart[v];refreshQty()},
- lang:()=>{S.lang=isU()?'en':'ur';render(true)},
+ lang:()=>{S.lang=S.lang==='ro'?'ur':S.lang==='ur'?'en':'ro';render(true)},
  vil:v=>{S.v=+v;render(true)},slot:v=>{S.slot=+v;render(true)},pay:v=>{S.pay=v;render(true)},
- place:()=>{S.lastId=1046+Math.floor(Math.random()*50);if(S.pay==='onk')S.bal+=subT()+(subT()>=2000?0:100);S.orders.unshift({id:S.lastId,n:'New customer',v:S.v,i:count(),a:subT(),st:0});S.cart={};S.view='track';render()},
+ place:()=>{S.lastId=1046+Math.floor(Math.random()*50);if(S.pay==='onk')S.bal+=subT()+(subT()>=2000?0:100);S.orders.unshift({id:S.lastId,n:L('newc'),v:S.v,i:count(),a:subT(),st:0});S.cart={};S.view='track';render()},
  monthly:(v,el)=>{MONTHLY.forEach(([id,q])=>S.cart[id]=(S.cart[id]||0)+q);fly(el);toast(L('added'));setTimeout(()=>go('cart'),700)},
  voice:()=>voice(),listen:()=>listen(),
  vadd:()=>{[['cheeni',2],['ghee',1],['anday',1]].forEach(([id,q])=>S.cart[id]=(S.cart[id]||0)+q);closeS();toast(L('added'));go('cart')},
@@ -642,8 +649,8 @@ $('#vsel').addEventListener('change',e=>{S.v=+e.target.value;if(S.view!=='home')
 /* search */
 function search(q){const r=$('#res'),hb=$('#homeBody');if(!r)return;q=q.trim().toLowerCase();
  if(!q){r.innerHTML='';hb.style.display='';return}
- const m=P.filter(p=>p.en.toLowerCase().includes(q)||p.ur.includes(q)||p.id.includes(q));hb.style.display='none';
- r.innerHTML=`<div class="sec"><div class="h"><h3>${m.length} ${isU()?'<span class="ur">نتائج</span>':'results'}</h3></div>${m.length?`<div class="grid">${m.map(card).join('')}</div>`:`<div class="empty"><p class="${isU()?'ur':''}">${isU()?'کچھ نہیں ملا، بول کر بتائیں':'Nothing found. Try speaking instead'}</p><button class="big" data-a="voice">${L('voice')}</button></div>`}</div>`}
+ const m=P.filter(p=>p.en.toLowerCase().includes(q)||PRO[p.id].toLowerCase().includes(q)||p.ur.includes(q)||p.id.includes(q));hb.style.display='none';
+ r.innerHTML=`<div class="sec"><div class="h"><h3>${m.length} ${isU()?`<span class="ur">${L('res')}</span>`:L('res')}</h3></div>${m.length?`<div class="grid">${m.map(card).join('')}</div>`:`<div class="empty"><p class="${isU()?'ur':''}">${L('nf')}</p><button class="big" data-a="voice">${L('voice')}</button></div>`}</div>`}
 $('#q').addEventListener('input',e=>{if(S.view!=='home'){S.view='home';render()}search(e.target.value)});
 
 /* routing */
