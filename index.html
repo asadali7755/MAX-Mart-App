@@ -450,6 +450,15 @@ table.mt{width:100%;border-collapse:collapse;background:var(--card);border:1px s
 .stafrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
 .stafrow span{flex:1;font-weight:700}.stafrow small{display:block;color:var(--mut);font-weight:600}
 .stafrow button{width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--red);font-weight:800;font-size:20px}
+/* packer page (opened by packing boy from WhatsApp link) */
+.pkhead{margin:14px 16px 0;border-radius:22px;background:var(--g);color:#fff;padding:16px;position:relative;overflow:hidden}
+.pkhead::after{content:"";position:absolute;width:200px;height:200px;border-radius:50%;background:#ffffff12;inset-inline-end:-60px;top:-80px}
+.pkhead small{opacity:.85;font-weight:600}.pkhead b{display:block;font-size:26px;line-height:1.3}
+.pkhead .who{font-size:18px;font-weight:800;margin-top:6px}
+.pkcount{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-weight:800}
+.pkcount .pkbar{flex:1;margin:0 12px;background:#ffffff33}.pkcount .pkbar i{background:var(--y)}
+.alldone{background:#DDF3E5;border:2px solid var(--g3);border-radius:20px;padding:14px;margin-top:6px;text-align:center;color:#14231C}
+.alldone b{display:block;font-size:20px;color:var(--g3)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -945,19 +954,34 @@ async function shareBill(id){const e=DB.E.find(x=>x.id==id),p=party(e.pid),text=
  try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(er){}
  const num=(p.wa||'').replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/'+(/^03\d{9}$/.test(num)?'92'+num.slice(1):'')+'?text='+encodeURIComponent(text);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
  fin(1)}
-function packMsg(e,s){const p=party(e.pid);const lines=e.items.map(([k,q],i)=>{const{it,v}=PK(k);return `${i+1}. ${it.ro} · ${v.ro}  × ${q}`});
+const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const b64d=s=>{try{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return JSON.parse(decodeURIComponent(escape(atob(s))))}catch(e){return null}};
+function packLink(e,s){const p=party(e.pid);const o={i:e.id,c:p.n,sh:p.shop||'',v:e.v||p.v,d:e.d,n:s.n,it:e.items.map(([k,q])=>{const{it,v}=PK(k);return[it.ro,it.ur,v.ro,v.ur,q,typeof it.img==='string'&&!it.img.startsWith('data:')&&it.img!=='none'?it.img:'']})};
+ return location.origin+location.pathname+'?pk='+b64e(o)}
+const pkKey=()=>'mmpk_'+(S.pkd?S.pkd.i:'');
+function pkTicks(){try{return JSON.parse(localStorage.getItem(pkKey())||'{}')}catch(e){return S.pkt||{}}}
+function pkSave(t){S.pkt=t;try{localStorage.setItem(pkKey(),JSON.stringify(t))}catch(e){}}
+V.packer=()=>{const d=S.pkd;if(!d)return `<div class="empty">${L('Ye link theek nahi','یہ لنک ٹھیک نہیں')}</div>`;const t=pkTicks(),n=d.it.length,done=d.it.filter((_,i)=>t[i]).length,qty=d.it.reduce((a,x)=>a+x[4],0);
+ return `<div class="pkhead"><small>MAX BACHAT MART · ${L('Packing list','پیکنگ لسٹ')}</small><b>${L('Order','آرڈر')} #${d.i}</b><div class="who">${esc(d.sh||d.c)}</div><small>${d.sh?esc(d.c)+' · ':''}${vname(d.v)} · ${fd(d.d)} · ${L('Packing','پیکنگ')}: ${esc(d.n)}</small>
+ <div class="pkcount"><span>${done}/${n}</span><span class="pkbar"><i style="width:${n?done/n*100:0}%"></i></span><span>${L('pack','پیک')}</span></div></div>
+ <div class="sec"><div class="h"><h3>${L('Kya kya pack karna hai','کیا کیا پیک کرنا ہے')}</h3><small>${n} · ${qty} ${L('adad','عدد')}</small></div>
+ ${d.it.map(([ro,ur,vr,vu,q,img],i)=>{const on=!!t[i];return `<button class="pkrow ${on?'done':''}" data-a="ptk" data-v="${i}"><span class="tk">${on?CHECK:''}</span><span class="pa" style="background:#FFF4DA">${art(img||'none')}</span><span class="t"><b>${L(ro,ur||ro)}</b><small>${L(vr,vu||vr)}</small></span><span class="qb"><strong>× ${q}</strong></span></button>`}).join('')}
+ <p class="note" style="margin-top:0">${L('Har cheez pack karte waqt us par tick lagayein','ہر چیز پیک کرتے وقت اس پر ٹک لگائیں')}</p>
+ ${done===n&&n?`<div class="alldone"><b>${L('Sab pack ho gaya!','سب پیک ہو گیا!')}</b>${L('Ab owner ko bata dein','اب مالک کو بتا دیں')}</div>`:''}
+ <button class="big ${done===n?'wa':'ghost'}" data-a="pdone">${WA.replace('#fff',done===n?'#fff':'#1FA855')} ${L('Owner ko batayein: pack ho gaya','مالک کو بتائیں: پیک ہو گیا','Tell owner: packed')}</button></div>`};
+function packMsg(e,s){const p=party(e.pid);return `*MAX BACHAT MART · Packing list*\n\nAssalam o Alaikum ${s.n},\n*Order #${e.id}* · ${p.shop||p.n} (${e.v||p.v})\n${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nList kholein aur har cheez pack karte waqt tick lagayein:\n${packLink(e,s)}`;const lines=e.items.map(([k,q],i)=>{const{it,v}=PK(k);return `${i+1}. ${it.ro} · ${v.ro}  × ${q}`});
  return `*MAX BACHAT MART · Packing list*\n\nAssalam o Alaikum ${s.n},\nYe order pack karna hai:\n\n*Order #${e.id}*\nCustomer: *${p.n}*${p.shop?' ('+p.shop+')':''}\nGaon: ${e.v||p.v}\nTareekh: ${fd(e.d)}\n\n${lines.join('\n')}\n\nKul: ${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nPack karke owner ko batayein: "${p.n.split(' ')[0]} / Order #${e.id} pack ho gaya"`}
 function staffSheet(){const st=DB.staff||[];sheet(`<div class="grab"></div><h3>${L('Packing wala','پیکنگ والا')}</h3><p>${L('Jo larka dukaan par saaman pack karta hai','جو لڑکا دکان پر سامان پیک کرتا ہے')}</p>
  ${st.length?`<div style="margin-top:8px">${st.map(s=>`<div class="stafrow"><span>${esc(s.n)}<small>WhatsApp ${s.wa}</small></span><button data-a="delpk" data-v="${s.id}" aria-label="remove">×</button></div>`).join('')}</div>`:''}
  <label class="fld">${L('Naam','نام')}<input id="s_n" placeholder="Ali"></label><label class="fld">${L('WhatsApp number','واٹس ایپ نمبر')}<input id="s_wa" type="tel" inputmode="tel" placeholder="03xx xxxxxxx"></label><div class="err" id="serr"></div>
  <button class="big" data-a="savepk">${L('Save karein','محفوظ کریں')}</button>`)}
 /* ---------- header, tabs, render ---------- */
-const ROLE={customer:['Customer','کسٹمر'],shop:['Dukan wala','دکان دار'],owner:['Owner','مالک']};
+const ROLE={customer:['Customer','کسٹمر'],shop:['Dukan wala','دکان دار'],owner:['Owner','مالک'],packer:['Packing list','پیکنگ لسٹ']};
 function hdr(){const lb=`<button class="lang" data-a="lang" aria-label="Change language">${S.lang==='ro'?'اردو':S.lang==='ur'?'English':'Roman'}</button>`;
  if(!S.role){topEl.innerHTML=`<div class="row"><span class="logo">${LOGO}<span>MAX BACHAT<br><b>MART</b></span></span><div class="sp"></div>${lb}</div>`;return}
- topEl.innerHTML=`<div class="row"><button class="logo" data-a="roles" aria-label="Apps">${LOGO}<span>MAX BACHAT<br><b>${Lp(...ROLE[S.role])}</b></span></button><div class="sp"></div>${S.role==='customer'?`<label class="pill">${PIN}<select id="vsel" aria-label="Village">${VILL.map((v,i)=>`<option value="${i}" ${i===S.v?'selected':''}>${Lp(v,VU[i])}</option>`).join('')}</select></label>`:S.role==='shop'&&me()?`<span class="pill">${PIN}${vname(party(me()).v)}</span>`:''}${lb}</div>${S.role==='owner'?`<div class="seg">${[['local','Gaon ke log','گاؤں کے لوگ'],['shop','Dukanein','دکانیں']].map(([k,r,u])=>`<button class="${S.seg===k?'on':''}" data-a="seg" data-v="${k}">${L(r,u)} <small>${allP().filter(p=>p.t===k).length}</small></button>`).join('')}</div>`:''}`;
+ topEl.innerHTML=`<div class="row"><button class="logo" ${S.role==='packer'?'':'data-a="roles"'} aria-label="Apps">${LOGO}<span>MAX BACHAT<br><b>${Lp(...ROLE[S.role])}</b></span></button><div class="sp"></div>${S.role==='packer'?'':S.role==='customer'?`<label class="pill">${PIN}<select id="vsel" aria-label="Village">${VILL.map((v,i)=>`<option value="${i}" ${i===S.v?'selected':''}>${Lp(v,VU[i])}</option>`).join('')}</select></label>`:S.role==='shop'&&me()?`<span class="pill">${PIN}${vname(party(me()).v)}</span>`:''}${lb}</div>${S.role==='owner'?`<div class="seg">${[['local','Gaon ke log','گاؤں کے لوگ'],['shop','Dukanein','دکانیں']].map(([k,r,u])=>`<button class="${S.seg===k?'on':''}" data-a="seg" data-v="${k}">${L(r,u)} <small>${allP().filter(p=>p.t===k).length}</small></button>`).join('')}</div>`:''}`;
  const vs=$('#vsel');if(vs)vs.onchange=e=>{S.v=+e.target.value;if(S.view==='cart')render(true)}}
-function tabs(){if(!S.role||S.view==='reg'){tabsEl.style.display='none';return}tabsEl.style.display='';
+function tabs(){if(!S.role||S.view==='reg'||S.role==='packer'){tabsEl.style.display='none';return}tabsEl.style.display='';
  const own=S.role==='owner',ids=own?segP().map(p=>p.id):[];
  const T=own?[['ohome','home','Home','ہوم'],['oorders','orders','Orders','آرڈر',DB.E.filter(e=>e.k==='o'&&e.st==='pending'&&ids.includes(e.pid)).length],['okhate','khata','Khate','کھاتے'],['ocat','box','Saaman','سامان'],['orem','bell','Yaad-dihani','یاد دہانی',segP().filter(p=>stats(p.id).bal>0).length]]
   :[['home','home','Ghar','گھر'],['khata','khata','Khata','کھاتہ'],['cart','','Tokri','ٹوکری',count()],['orders','orders','Orders','آرڈر'],['account','account','Account','اکاؤنٹ']];
@@ -968,7 +992,7 @@ function tabs(){if(!S.role||S.view==='reg'){tabsEl.style.display='none';return}t
 let banT;
 function render(keep){if((S.role==='customer'||S.role==='shop')&&!me())S.view='reg';else if(S.view==='reg')S.view='home';
  app.dir=U()?'rtl':'ltr';document.documentElement.lang=U()?'ur':'en';
- if(S.role==='customer'||S.role==='shop')checkNotes();
+ if(S.role==='customer'||S.role==='shop')checkNotes();if(S.role==='packer')S.view='packer';
  hdr();const top=view.scrollTop;view.innerHTML=(V[S.view]||V.choose)();view.scrollTop=keep?top:0;tabs();
  if(S.view==='home')startBan();else clearInterval(banT);
  const q=$('#q');if(q)q.addEventListener('input',e=>search(e.target.value));
@@ -1027,6 +1051,10 @@ const A={
  roles:()=>{S.role=null;S.view='choose';history.replaceState(null,'',location.pathname+location.search);closeS();render()},
  reset:()=>{DB=fresh();save();S.seen={};S.sent={};S.carts={customer:{},shop:{}};toast(Lp('Sab data saaf ho gaya','سب ڈیٹا صاف ہو گیا'));render()},
  go:v=>{closeS();go(v)},
+ ptk:v=>{const t=pkTicks();t[v]=!t[v];pkSave(t);render(true)},
+ pdone:()=>{const d=S.pkd;if(!d)return;const t=pkTicks(),n=d.it.length,done=d.it.filter((_,i)=>t[i]).length;
+  const msg=`${(d.c||'').split(' ')[0]} / Order #${d.i} ${done===n?'pack ho gaya ✓':'packing jari hai'} (${done}/${n} cheezein)`;
+  try{const w=document.createElement('a');w.href='https://wa.me/?text='+encodeURIComponent(msg);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}},
  addpk:()=>staffSheet(),
  savepk:()=>{const n=($('#s_n').value||'').trim(),wa=normPh($('#s_wa').value);if(n.length<2){$('#serr').innerHTML=L('Naam likhein','نام لکھیں');return}if(!wa){$('#serr').innerHTML=L('WhatsApp number theek likhein, jaise 0300 1234567','واٹس ایپ نمبر ٹھیک لکھیں، جیسے 0300 1234567');return}
   const s={id:'st'+Date.now().toString(36),n,wa};DB.staff.push(s);const e=DB.E.find(x=>x.id==S.oid);if(e&&S.view==='oorder')e.packer=s.id;save();closeS();toast(Lp(`${n} save ho gaya`,`${n} محفوظ ہو گیا`,`${n} saved`));render(true)},
@@ -1095,10 +1123,11 @@ document.addEventListener('input',e=>{const f=e.target.dataset&&e.target.dataset
 document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const f=A[el.dataset.a];if(f){e.preventDefault();f(el.dataset.v,el)}});
 
 /* routing + sync between tabs */
-function fromHash(){const h=location.hash.slice(1);$('#toast').classList.remove('on');if(ROLE[h]){if(S.role!==h){S.role=h;S.view=h==='owner'?'ohome':(DB.acc[h]?'home':'reg')}}else{S.role=null;S.view='choose'}render()}
+function fromHash(){if(S.role==='packer'){render();return}const h=location.hash.slice(1);$('#toast').classList.remove('on');if(ROLE[h]){if(S.role!==h){S.role=h;S.view=h==='owner'?'ohome':(DB.acc[h]?'home':'reg')}}else{S.role=null;S.view='choose'}render()}
 addEventListener('hashchange',fromHash);
 addEventListener('storage',e=>{if(e.key===KEY){load();render(true)}});
 load();
+{const q=new URLSearchParams(location.search).get('pk');if(q){S.pkd=b64d(q);S.role='packer';S.view='packer'}}
 try{const lg=localStorage.getItem('mm_lang');if(['ro','ur','en'].includes(lg))S.lang=lg}catch(e){}
 if(me()==null){/* prime seen for both buyer apps so later changes notify */}
 ['c1','s1'].forEach(id=>DB.E.forEach(e=>{if(e.pid===id&&e.k==='o')S.seen[e.id]=e.st}));
