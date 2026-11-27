@@ -969,6 +969,31 @@ V.packer=()=>{const d=S.pkd;if(!d)return `<div class="empty">${L('Ye link theek 
  <p class="note" style="margin-top:0">${L('Har cheez pack karte waqt us par tick lagayein','ہر چیز پیک کرتے وقت اس پر ٹک لگائیں')}</p>
  ${done===n&&n?`<div class="alldone"><b>${L('Sab pack ho gaya!','سب پیک ہو گیا!')}</b>${L('Ab owner ko bata dein','اب مالک کو بتا دیں')}</div>`:''}
  <button class="big ${done===n?'wa':'ghost'}" data-a="pdone">${WA.replace('#fff',done===n?'#fff':'#1FA855')} ${L('Owner ko batayein: pack ho gaya','مالک کو بتائیں: پیک ہو گیا','Tell owner: packed')}</button></div>`};
+function packCanvas(e,s){const p=party(e.pid),rows=e.items,W=1080,RH=96,H=760+rows.length*RH,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),F=(w,z)=>`${w} ${z}px "Baloo 2", sans-serif`;
+ x.fillStyle='#F7F4EA';x.fillRect(0,0,W,H);x.fillStyle='#0E5C46';x.fillRect(0,0,W,200);
+ x.fillStyle='#FFC531';x.beginPath();x.arc(110,100,46,0,7);x.fill();x.fillStyle='#083D2F';x.font=F(800,44);x.textAlign='center';x.fillText('M',110,116);x.textAlign='left';
+ x.fillStyle='#fff';x.font=F(800,52);x.fillText('MAX BACHAT MART',180,102);x.fillStyle='#CFE6DA';x.font=F(600,26);x.fillText('Packing list  ·  Packing: '+s.n,180,148);
+ x.fillStyle='#14231C';x.font=F(800,46);x.fillText('Order #'+e.id,60,276);x.textAlign='right';x.font=F(600,26);x.fillStyle='#5D6D65';x.fillText(fd(e.d),W-60,270);x.textAlign='left';
+ x.fillStyle='#14231C';x.font=F(800,34);x.fillText(pname(p),60,328);x.fillStyle='#5D6D65';x.font=F(500,26);x.fillText(`${p.shop?p.n+'  ·  ':''}${e.v||p.v}`,60,368);
+ let y=440;x.fillStyle='#E8E3D3';x.fillRect(40,y-44,W-80,62);x.fillStyle='#14231C';x.font=F(700,24);x.fillText('Pack',62,y);x.fillText('Cheez',190,y);x.textAlign='right';x.fillText('Ginti',1016,y);x.textAlign='left';
+ y+=30;rows.forEach(([k,q],i)=>{const{it,v}=PK(k);if(i%2===0){x.fillStyle='#fff';x.fillRect(40,y,W-80,RH)}
+  x.strokeStyle='#0E5C46';x.lineWidth=4;x.strokeRect(72,y+24,48,48);
+  x.fillStyle='#14231C';x.font=F(800,32);x.fillText(it.ro,190,y+46);x.font=F(600,24);x.fillStyle='#5D6D65';x.fillText(v.ro,190,y+80);
+  x.fillStyle='#14231C';x.font=F(800,44);x.textAlign='right';x.fillText('× '+q,1016,y+64);x.textAlign='left';y+=RH});
+ y+=30;x.fillStyle='#fff';x.fillRect(40,y,W-80,90);x.strokeStyle='#E8E3D3';x.lineWidth=2;x.strokeRect(40,y,W-80,90);x.fillStyle='#14231C';x.font=F(800,32);
+ x.fillText(`Kul: ${rows.length} cheezein`,70,y+58);x.textAlign='right';x.fillText(`${rows.reduce((a,[,q])=>a+q,0)} adad`,W-70,y+58);x.textAlign='left';
+ y+=120;x.fillStyle='#FFC531';x.fillRect(40,y,W-80,120);x.fillStyle='#083D2F';x.font=F(800,28);x.fillText('Har cheez pack karke us ke box mein tick lagayein',70,y+50);
+ x.font=F(600,24);x.fillText(`Sab pack ho jaye to owner ko batayein: "${p.n.split(' ')[0]} / Order #${e.id} pack ho gaya"`,70,y+92);return c}
+function packSheet(sid){const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===sid);if(!e||!s)return;let url='';try{url=packCanvas(e,s).toDataURL('image/png')}catch(er){}
+ sheet(`<div class="grab"></div><h3>${L('Packing list ki file','پیکنگ لسٹ کی فائل')}</h3><p>${esc(s.n)} · ${L('Order','آرڈر')} #${e.id}</p><div class="stmt"><img src="${url}" alt="Packing list"></div><button class="big wa" data-a="pkshare" data-v="${s.id}">${WA} ${L(esc(s.n)+' ko WhatsApp par bhejein',esc(s.n)+' کو واٹس ایپ پر بھیجیں','Send to '+esc(s.n)+' on WhatsApp')}</button><p class="note">${L('Ali WhatsApp mein tasveer par qalam (draw) se tick laga sakta hai','علی واٹس ایپ میں تصویر پر قلم سے ٹک لگا سکتا ہے','The packer can tick boxes using WhatsApp\'s draw tool')}</p>`)}
+async function sharePack(sid){const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===sid);if(!e||!s)return;const p=party(e.pid),name=`Packing-${e.id}.png`;
+ const text=`*MAX BACHAT MART · Packing list*\nOrder #${e.id} · ${p.shop||p.n} (${e.v||p.v})\n${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\nPack karke batayein: "${p.n.split(' ')[0]} / Order #${e.id} pack ho gaya"`;
+ let blob=null;try{blob=await new Promise(r=>packCanvas(e,s).toBlob(r,'image/png'))}catch(er){}
+ const fin=fb=>{e.packer=s.id;e.pkSent=s.n;save();closeS();toast(fb?Lp('File download ho gayi. Ali ki chat mein attach kar dein','فائل ڈاؤن لوڈ ہو گئی۔ علی کی چیٹ میں لگا دیں','File downloaded. Attach it in the chat'):Lp(`${s.n} ko list bhej di`,`${s.n} کو لسٹ بھیج دی`,`List sent to ${s.n}`));render(true)};
+ try{if(blob&&navigator.canShare){const file=new File([blob],name,{type:'image/png'});if(navigator.canShare({files:[file]})){await navigator.share({files:[file],text});fin();return}}}catch(er){if(er&&er.name==='AbortError')return}
+ try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(er){}
+ const num=s.wa.replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/92'+num.slice(1)+'?text='+encodeURIComponent(text);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
+ fin(1)}
 function packMsg(e,s){const p=party(e.pid);return `*MAX BACHAT MART · Packing list*\n\nAssalam o Alaikum ${s.n},\n*Order #${e.id}* · ${p.shop||p.n} (${e.v||p.v})\n${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nList kholein aur har cheez pack karte waqt tick lagayein:\n${packLink(e,s)}`;const lines=e.items.map(([k,q],i)=>{const{it,v}=PK(k);return `${i+1}. ${it.ro} · ${v.ro}  × ${q}`});
  return `*MAX BACHAT MART · Packing list*\n\nAssalam o Alaikum ${s.n},\nYe order pack karna hai:\n\n*Order #${e.id}*\nCustomer: *${p.n}*${p.shop?' ('+p.shop+')':''}\nGaon: ${e.v||p.v}\nTareekh: ${fd(e.d)}\n\n${lines.join('\n')}\n\nKul: ${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nPack karke owner ko batayein: "${p.n.split(' ')[0]} / Order #${e.id} pack ho gaya"`}
 function staffSheet(){const st=DB.staff||[];sheet(`<div class="grab"></div><h3>${L('Packing wala','پیکنگ والا')}</h3><p>${L('Jo larka dukaan par saaman pack karta hai','جو لڑکا دکان پر سامان پیک کرتا ہے')}</p>
@@ -1060,7 +1085,9 @@ const A={
   const s={id:'st'+Date.now().toString(36),n,wa};DB.staff.push(s);const e=DB.E.find(x=>x.id==S.oid);if(e&&S.view==='oorder')e.packer=s.id;save();closeS();toast(Lp(`${n} save ho gaya`,`${n} محفوظ ہو گیا`,`${n} saved`));render(true)},
  delpk:v=>{DB.staff=DB.staff.filter(s=>s.id!==v);save();staffSheet();render(true)},
  selpk:v=>{const e=DB.E.find(x=>x.id==S.oid);if(e){e.packer=v;save();render(true)}},
- sendpk:v=>{const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===v);if(!e||!s)return;e.packer=s.id;e.pkSent=s.n;save();
+ pkshare:v=>{sharePack(v)},
+ sendpk:v=>{packSheet(v)},
+ sendpkOld:v=>{const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===v);if(!e||!s)return;e.packer=s.id;e.pkSent=s.n;save();
   const num=s.wa.replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/92'+num.slice(1)+'?text='+encodeURIComponent(packMsg(e,s));w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
   toast(Lp(`${s.n} ko list bhej di`,`${s.n} کو لسٹ بھیج دی`,`List sent to ${s.n}`));render(true)},
  oorder:v=>{S.oid=+v;go('oorder')},
