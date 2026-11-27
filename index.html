@@ -988,14 +988,18 @@ function packCanvas(e,s){const p=party(e.pid),rows=e.items,W=1080,RH=96,H=760+ro
  x.fillText(`Kul: ${rows.length} cheezein`,70,y+58);x.textAlign='right';x.fillText(`${rows.reduce((a,[,q])=>a+q,0)} adad`,W-70,y+58);x.textAlign='left';
  y+=120;x.fillStyle='#FFC531';x.fillRect(40,y,W-80,120);x.fillStyle='#083D2F';x.font=F(800,28);x.fillText('Har cheez pack karke us ke box mein tick lagayein',70,y+50);
  x.font=F(600,24);x.fillText('Sab pack ho jaye to link khol kar "Owner ko batayein" button dabayein',70,y+92);return c}
-function packSheet(sid){const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===sid);if(!e||!s)return;let url='';try{url=packCanvas(e,s).toDataURL('image/png')}catch(er){}
- sheet(`<div class="grab"></div><h3>${L('Packing list ki file','پیکنگ لسٹ کی فائل')}</h3><p>${esc(s.n)} · ${L('Order','آرڈر')} #${e.id}</p><div class="stmt"><img src="${url}" alt="Packing list"></div><button class="big wa" data-a="pkshare" data-v="${s.id}">${WA} ${L(esc(s.n)+' ko WhatsApp par bhejein',esc(s.n)+' کو واٹس ایپ پر بھیجیں','Send to '+esc(s.n)+' on WhatsApp')}</button><p class="note">${L('Ali WhatsApp mein tasveer par qalam (draw) se tick laga sakta hai','علی واٹس ایپ میں تصویر پر قلم سے ٹک لگا سکتا ہے','The packer can tick boxes using WhatsApp\'s draw tool')}</p>`)}
+function packSheet(sid){const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===sid);if(!e||!s)return;let url='';try{url=packCanvas(e,s).toDataURL('image/png')}catch(er){}const st=S.pkStep||{};
+ sheet(`<div class="grab"></div><h3>${L(esc(s.n)+' ko packing list',esc(s.n)+' کو پیکنگ لسٹ','Packing list for '+esc(s.n))}</h3><p>${L('Order','آرڈر')} #${e.id} · ${L('do cheezein bhejein','دو چیزیں بھیجیں','send both')}</p>
+ <button class="big wa" data-a="pklink" data-v="${s.id}">${st.link?CHECK:WA} 1 · ${L('Tick wala link bhejein','ٹک والا لنک بھیجیں','Send tick-list link')}</button>
+ <p class="note" style="margin:6px 0 0">${L('Is link se Ali tick lagayega aur "pack ho gaya" bata sakega','اس لنک سے علی ٹک لگائے گا اور "پیک ہو گیا" بتا سکے گا','The packer ticks items and reports "packed" from this link')}</p>
+ <div class="stmt" style="max-height:30vh"><img src="${url}" alt="Packing list"></div>
+ <button class="big ${st.img?'ghost':'wa'}" data-a="pkshare" data-v="${s.id}">${st.img?CHECK:WA} 2 · ${L('Tasveer bhi bhejein','تصویر بھی بھیجیں','Also send picture')}</button>
+ <button class="big ghost" data-a="close" style="margin-top:10px">${L('Ho gaya','ہو گیا','Done')}</button>`)}
 async function sharePack(sid){const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===sid);if(!e||!s)return;const p=party(e.pid),name=`Packing-${e.id}.png`;
  const text=`*MAX BACHAT MART · Packing list*\nOrder #${e.id} · ${p.shop||p.n} (${e.v||p.v})\n${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nList kholein, har cheez pack karte waqt tick lagayein aur aakhir mein button daba kar owner ko batayein:\n${packLink(e,s)}`;
  let blob=null;try{blob=c2b(packCanvas(e,s))}catch(er){}
- const fin=fb=>{e.packer=s.id;e.pkSent=s.n;save();closeS();toast(fb?Lp('File download ho gayi. Ali ki chat mein attach kar dein','فائل ڈاؤن لوڈ ہو گئی۔ علی کی چیٹ میں لگا دیں','File downloaded. Attach it in the chat'):Lp(`${s.n} ko list bhej di`,`${s.n} کو لسٹ بھیج دی`,`List sent to ${s.n}`));render(true)};
- try{if(blob&&navigator.canShare){const file=new File([blob],name,{type:'image/png'});if(navigator.canShare({files:[file]})){await navigator.share({files:[file],text});fin();return}}}catch(er){if(er&&er.name==='AbortError')return}
- const num=s.wa.replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/92'+num.slice(1)+'?text='+encodeURIComponent(text);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
+ const fin=fb=>{e.packer=s.id;e.pkSent=s.n;save();S.pkStep=Object.assign(S.pkStep||{},{img:1});render(true);packSheet(s.id);toast(fb?Lp('Tasveer download ho gayi. Ali ki chat mein attach kar dein','تصویر ڈاؤن لوڈ ہو گئی۔ علی کی چیٹ میں لگا دیں','Picture downloaded. Attach it in the chat'):Lp('Tasveer bhej di','تصویر بھیج دی','Picture sent'))};
+ try{if(blob&&navigator.canShare){const file=new File([blob],name,{type:'image/png'});if(navigator.canShare({files:[file]})){await navigator.share({files:[file]});fin();return}}}catch(er){if(er&&er.name==='AbortError')return}
  try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(er){}
  fin(1)}
 function packMsg(e,s){const p=party(e.pid);return `*MAX BACHAT MART · Packing list*\n\nAssalam o Alaikum ${s.n},\n*Order #${e.id}* · ${p.shop||p.n} (${e.v||p.v})\n${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nList kholein aur har cheez pack karte waqt tick lagayein:\n${packLink(e,s)}`;const lines=e.items.map(([k,q],i)=>{const{it,v}=PK(k);return `${i+1}. ${it.ro} · ${v.ro}  × ${q}`});
@@ -1099,7 +1103,11 @@ const A={
  delpk:v=>{DB.staff=DB.staff.filter(s=>s.id!==v);save();staffSheet();render(true)},
  selpk:v=>{const e=DB.E.find(x=>x.id==S.oid);if(e){e.packer=v;save();render(true)}},
  pkshare:v=>{sharePack(v)},
- sendpk:v=>{packSheet(v)},
+ pklink:v=>{const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===v);if(!e||!s)return;const p=party(e.pid);
+  const text=`*MAX BACHAT MART · Packing list*\nOrder #${e.id} · ${p.shop||p.n} (${e.v||p.v})\n${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\n👇 Ye link kholein, har cheez pack karte waqt tick lagayein, aur aakhir mein button daba kar owner ko batayein:\n${packLink(e,s)}`;
+  const num=s.wa.replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/92'+num.slice(1)+'?text='+encodeURIComponent(text);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
+  e.packer=s.id;e.pkSent=s.n;save();S.pkStep=Object.assign(S.pkStep||{},{link:1});render(true);packSheet(s.id)},
+ sendpk:v=>{S.pkStep={};packSheet(v)},
  sendpkOld:v=>{const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===v);if(!e||!s)return;e.packer=s.id;e.pkSent=s.n;save();
   const num=s.wa.replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/92'+num.slice(1)+'?text='+encodeURIComponent(packMsg(e,s));w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
   toast(Lp(`${s.n} ko list bhej di`,`${s.n} کو لسٹ بھیج دی`,`List sent to ${s.n}`));render(true)},
