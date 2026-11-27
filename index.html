@@ -701,8 +701,8 @@ function seed(){return {E:[],next:1001};const r=rng(11),E=[];let id=1001;const M
  .forEach(([pid,items,st])=>E.push({id:id++,pid,k:'o',d:t,items,amt:sum(items),st,m:'khata'}));
  return {E,next:id}}
 const KEY='maxmart_v5';let DB;
-function fresh(){applyCatalog([]);const d=seed();d.NP=[];d.acc={};d.CI=[];d.staff=[];return d}
-function load(){try{const j=localStorage.getItem(KEY);if(j){DB=JSON.parse(j);DB.NP=DB.NP||[];DB.acc=DB.acc||{};DB.CI=DB.CI||[];DB.staff=DB.staff||[];DB.E.forEach(e=>{if(e.st==='onway')e.st='packed'});applyCatalog(DB.CI);return}}catch(e){}DB=fresh();save()}
+function fresh(){applyCatalog([]);const d=seed();d.NP=[];d.acc={};d.CI=[];d.staff=[];d.ch=Math.random().toString(36).slice(2,12);return d}
+function load(){try{const j=localStorage.getItem(KEY);if(j){DB=JSON.parse(j);DB.NP=DB.NP||[];DB.acc=DB.acc||{};DB.CI=DB.CI||[];DB.staff=DB.staff||[];if(!DB.ch){DB.ch=Math.random().toString(36).slice(2,12);save()}DB.E.forEach(e=>{if(e.st==='onway')e.st='packed'});applyCatalog(DB.CI);return}}catch(e){}DB=fresh();save()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
 const ofP=pid=>DB.E.filter(e=>e.pid===pid);
 function stats(pid){let buy=0,paid=0,first=null,lastPay=null,orders=0;for(const e of DB.E){if(e.pid!==pid)continue;if(e.k==='o'){if(e.st==='pending')continue;buy+=e.amt;orders++;if(!first||e.d<first)first=e.d}else{paid+=e.amt;if(!lastPay||e.d>lastPay)lastPay=e.d}}return{buy,paid,bal:buy-paid,first,lastPay,orders}}
@@ -841,7 +841,7 @@ V.ohome=()=>{const ps=segP(),ids=ps.map(p=>p.id);let buy=0,paid=0;ids.forEach(i=
  <div class="kpi"><div><small>${L('Kul sale','کل سیل')}</small><b>${N(buy)}</b></div><div class="y"><small>${L('Kul wasool','کل وصول')}</small><b>${N(paid)}</b></div><div class="r"><small>${L('Kul baqaya','کل باقایا')}</small><b>${N(buy-paid)}</b></div><div><small>${L('Is mahine ki sale','اس مہینے کی سیل')}</small><b>${N(cur.buy)}</b></div></div></div>
  <div class="sec">${(()=>{const w=DB.E.filter(e=>e.k==='o'&&(e.st==='confirmed'||e.st==='packed')).sort((a,b)=>(a.st==='confirmed'?0:1)-(b.st==='confirmed'?0:1)||b.id-a.id);if(!w.length)return '';
   return `<div class="h"><h3>${L('Abhi kaam jari hai','ابھی کام جاری ہے')} · ${w.length}</h3></div>${w.map(e=>{const p=party(e.pid),n=e.items.length,d=e.items.filter((_,i)=>(e.pk||{})[i]).length;
-   return `<button class="wip ${e.st==='packed'?'pk':''}" data-a="oorder" data-v="${e.id}"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span class="t"><b>${pname(p)} · #${e.id}</b><small>${e.st==='confirmed'?(e.pkSent?L(`${e.pkSent} packing kar raha hai`,`${e.pkSent} پیکنگ کر رہا ہے`,`${e.pkSent} is packing`):L(`Packing: ${d}/${n} cheezein`,`پیکنگ: ${d}/${n} چیزیں`,`Packing: ${d}/${n} items`)):(e.wa?L('Bill bhej diya','بل بھیج دیا'):L('WhatsApp bill bhejna hai','واٹس ایپ بل بھیجنا ہے'))+(e.pick?' · '+Lp(...PICK[e.pick]):'')}</small>${e.st==='confirmed'?`<span class="pkbar"><i style="width:${n?d/n*100:0}%"></i></span>`:''}</span>${stB(e.st)}</button>`}).join('')}`})()}
+   return `<button class="wip ${e.st==='packed'?'pk':''}" data-a="oorder" data-v="${e.id}"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span class="t"><b>${pname(p)} · #${e.id}</b><small>${e.st==='confirmed'?(e.pkDone?L(`${e.pkDone.n} ne bataya: pack ho gaya ✓`,`${e.pkDone.n} نے بتایا: پیک ہو گیا ✓`,`${e.pkDone.n}: packed ✓`):e.pkSent?L(`${e.pkSent} packing kar raha hai`,`${e.pkSent} پیکنگ کر رہا ہے`,`${e.pkSent} is packing`):L(`Packing: ${d}/${n} cheezein`,`پیکنگ: ${d}/${n} چیزیں`,`Packing: ${d}/${n} items`)):(e.wa?L('Bill bhej diya','بل بھیج دیا'):L('WhatsApp bill bhejna hai','واٹس ایپ بل بھیجنا ہے'))+(e.pick?' · '+Lp(...PICK[e.pick]):'')}</small>${e.st==='confirmed'?`<span class="pkbar"><i style="width:${n?d/n*100:0}%"></i></span>`:''}</span>${stB(e.st)}</button>`}).join('')}`})()}
  ${(()=>{const n=(DB.NP||[]).filter(p=>p.t===S.seg&&p.isNew).length;return n?`<div class="alert" style="background:#E4F4EA;color:#0E5C46"><i style="background:var(--grn)">${n}</i><span>${L('naya account bana hai · neeche dekhein','نیا اکاؤنٹ بنا ہے · نیچے دیکھیں')}</span></div>`:''})()}${pend?`<button class="alert" data-a="go" data-v="oorders"><i>${pend}</i><span>${L('naye order confirm ka intezar kar rahe hain','نئے آرڈر کنفرم کا انتظار کر رہے ہیں')}</span></button>`:''}
  ${(()=>{const nw=(DB.NP||[]).filter(p=>p.t===S.seg&&p.isNew).slice().reverse();return nw.length?`<div class="h"><h3>${L('Naye accounts','نئے اکاؤنٹ')} · ${nw.length}</h3></div>${nw.map(p=>`<div class="newc"><div class="row"><span class="av ${p.t==='shop'?'s':''}">${ini(p)}</span><span style="flex:1"><b>${pname(p)} <span class="sb st-pending">${Lp('Naya','نیا')}</span></b><small>${p.shop?p.n+' · ':''}${vname(p.v)} · ${fd(p.joined)}</small><small>WhatsApp ${p.wa}${p.ph!==p.wa?' · Call '+p.ph:''}</small></span></div><div class="acts"><button class="act" data-a="party" data-v="${p.id}">${L('Khata kholein','کھاتہ کھولیں')}</button><a class="act ghost" href="https://wa.me/92${p.wa.replace(/[^0-9]/g,'').slice(1)}?text=${encodeURIComponent('Assalam o Alaikum '+p.n+', MAX BACHAT MART mein khush aamdeed! Aap ka account ban gaya hai.')}" target="_blank" rel="noopener">${WA.replace('#fff','#1FA855').replace('#1FA855"/></svg>','#fff"/></svg>')} ${Lp('Khush aamdeed','خوش آمدید')}</a></div></div>`).join('')}`:''})()}
  <div class="h"><h3>${L('Har mahine: sale aur wasooli','ہر مہینے: سیل اور وصولی')}</h3></div>${mbars(m,L('Sale','سیل'),L('Wasool','وصول'))}
@@ -863,7 +863,7 @@ V.oorder=()=>{const e=DB.E.find(x=>x.id==S.oid);if(!e){S.view='oorders';return V
  ${e.st==='confirmed'?(()=>{const st=DB.staff||[],sel=st.find(s=>s.id===e.packer)||(st.length===1?st[0]:null);return `<div class="packer"><b>${L('Packing kaun karega?','پیکنگ کون کرے گا؟')}</b>
   <div class="chips">${st.map(s=>`<button class="chip ${sel&&sel.id===s.id?'on':''}" data-a="selpk" data-v="${s.id}"><span class="ava">${s.n[0]}</span>${esc(s.n)}</button>`).join('')}<button class="chip" data-a="addpk">+ ${st.length?L('Aur','اور'):L('Packing wala add karein','پیکنگ والا شامل کریں')}</button></div>
   ${sel?`<button class="big wa" data-a="sendpk" data-v="${sel.id}">${WA} ${L(esc(sel.n)+' ko list bhejein',esc(sel.n)+' کو لسٹ بھیجیں','Send list to '+esc(sel.n))}</button>`:`<p class="note" style="margin:10px 0 0;text-align:start">${L('Pehle pack karne wale larke ka naam aur WhatsApp number daalein','پہلے پیک کرنے والے لڑکے کا نام اور واٹس ایپ نمبر ڈالیں')}</p>`}
-  ${e.pkSent?`<div class="sentok"><i>${CHECK}</i><span>${L(esc(e.pkSent)+' ko list bhej di',esc(e.pkSent)+' کو لسٹ بھیج دی','List sent to '+esc(e.pkSent))}<small style="display:block;color:var(--mut);font-weight:600">${L('Jab wo bataye ke pack ho gaya, neeche button dabayein','جب وہ بتائے کہ پیک ہو گیا، نیچے بٹن دبائیں')}</small></span></div>`:''}</div>`})():''}
+  ${e.pkDone?`<div class="sentok" style="background:#DDF3E5;border:2px solid var(--g3)"><i>${CHECK}</i><span>${L(esc(e.pkDone.n)+' ne bataya: pack ho gaya',esc(e.pkDone.n)+' نے بتایا: پیک ہو گیا',esc(e.pkDone.n)+' says: packed')} (${e.pkDone.d}/${e.pkDone.t})<small style="display:block;color:var(--mut);font-weight:600">${L('Ab neeche peela "Pack ho gaya" dabayein','اب نیچے پیلا "پیک ہو گیا" دبائیں','Now tap the yellow "Packed" button below')}</small></span></div>`:e.pkSent?`<div class="sentok"><i>${CHECK}</i><span>${L(esc(e.pkSent)+' ko list bhej di',esc(e.pkSent)+' کو لسٹ بھیج دی','List sent to '+esc(e.pkSent))}<small style="display:block;color:var(--mut);font-weight:600">${L('Jab wo bataye ke pack ho gaya, neeche button dabayein','جب وہ بتائے کہ پیک ہو گیا، نیچے بٹن دبائیں')}</small></span></div>`:''}</div>`})():''}
  ${e.st==='confirmed'?`<button class="big y" data-a="adv" data-v="${e.id}">${CHECK} ${L(...NEXT.confirmed)}</button>`:''}
  ${e.st==='confirmed'?`<p class="note">${L('Saaman pack hone ke baad "Pack ho gaya" dabayein. Phir customer ko WhatsApp par bill jayega.','سامان پیک ہونے کے بعد "پیک ہو گیا" دبائیں۔ پھر کسٹمر کو واٹس ایپ پر بل جائے گا۔')}</p>`:''}
  ${e.st==='packed'?`<div class="pbox"><b>${L('Saaman pack ho gaya','سامان پیک ہو گیا')}</b><button class="big wa" data-a="bill" data-v="${e.id}">${WA} ${e.wa?L('WhatsApp par dobara bhejein','واٹس ایپ پر دوبارہ بھیجیں'):L('WhatsApp par bill bhejein','واٹس ایپ پر بل بھیجیں')}</button>${e.wa?`<div class="pick"><i>${CHECK}</i><span>${L('Bill WhatsApp par bhej diya','بل واٹس ایپ پر بھیج دیا')}</span></div>`:''}
@@ -925,11 +925,11 @@ function stmtCanvas(pid){const p=party(pid),s=stats(pid),rows=ofP(pid).filter(e=
 const msgOf=pid=>{const p=party(pid),s=stats(pid);return `Assalam o Alaikum ${p.n} sahib, MAX BACHAT MART (Haji Shah) se aap ka hisaab: Kul khareedari ${N(s.buy)}, ada kiya ${N(s.paid)}, baqaya ${N(s.bal)}. Poori tafseel file mein hai. Shukriya!`};
 function stmtSheet(pid){let url='';try{url=stmtCanvas(pid).toDataURL('image/png')}catch(e){}const p=party(pid);
  sheet(`<div class="grab"></div><h3>${L('Hisaab ki file','حساب کی فائل')}</h3><p>${pname(p)} · ${L('baqaya','باقایا')} ${N(stats(pid).bal)}</p><div class="stmt"><img src="${url}" alt="Statement"></div><button class="big wa" data-a="share" data-v="${pid}">${WA} ${L('WhatsApp par bhejein','واٹس ایپ پر بھیجیں')}</button><p class="note">${L('Phone par WhatsApp khulega, contact chunein aur ye file chali jayegi','فون پر واٹس ایپ کھلے گا، رابطہ چنیں اور یہ فائل چلی جائے گی')}</p>`)}
-async function share(pid){const p=party(pid),text=msgOf(pid);let blob=null;try{blob=await new Promise(r=>stmtCanvas(pid).toBlob(r,'image/png'))}catch(e){}
+async function share(pid){const p=party(pid),text=msgOf(pid);let blob=null;try{blob=c2b(stmtCanvas(pid))}catch(e){}
  const name=`Hisaab-${pname(p).replace(/\s+/g,'-')}.png`;
  try{if(blob&&navigator.canShare){const file=new File([blob],name,{type:'image/png'});if(navigator.canShare({files:[file]})){await navigator.share({files:[file],text});done(pid);return}}}catch(e){if(e&&e.name==='AbortError')return}
- try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(e){}
  try{const w=document.createElement('a');w.href='https://wa.me/?text='+encodeURIComponent(text);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(e){}
+ try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(e){}
  done(pid,1)}
 function done(pid,fallback){S.sent[pid]=1;closeS();toast(fallback?Lp('File download ho gayi. WhatsApp mein attach kar dein','فائل ڈاؤن لوڈ ہو گئی۔ واٹس ایپ میں لگا دیں'):Lp('Hisaab bhej diya','حساب بھیج دیا'));render(true)}
 
@@ -948,15 +948,17 @@ function billCanvas(e){const p=party(e.pid),rows=e.items,W=1080,RH=64,H=900+rows
 const billMsg=e=>{const p=party(e.pid);return `Assalam o Alaikum ${p.n} sahib, MAX BACHAT MART se aap ka order #${e.id} pack ho gaya hai. Kul raqam ${N(e.amt)}. Bill file mein hai. Aap shop se aa kar le jayenge ya ghar deliver karein? Jawab dein: 1 = Khud le jaunga, 2 = Ghar deliver karein.`};
 function billSheet(id){const e=DB.E.find(x=>x.id==id);let url='';try{url=billCanvas(e).toDataURL('image/png')}catch(er){}
  sheet(`<div class="grab"></div><h3>${L('Bill ki file','بل کی فائل')}</h3><p>${pname(party(e.pid))} · #${e.id} · ${N(e.amt)}</p><div class="stmt"><img src="${url}" alt="Bill"></div><button class="big wa" data-a="billshare" data-v="${e.id}">${WA} ${L('WhatsApp par bhejein','واٹس ایپ پر بھیجیں')}</button><p class="note">${L('Phone par WhatsApp khulega, customer chunein aur bill chala jayega','فون پر واٹس ایپ کھلے گا، کسٹمر چنیں اور بل چلا جائے گا')}</p>`)}
-async function shareBill(id){const e=DB.E.find(x=>x.id==id),p=party(e.pid),text=billMsg(e),name=`Bill-${e.id}.png`;let blob=null;try{blob=await new Promise(r=>billCanvas(e).toBlob(r,'image/png'))}catch(er){}
+async function shareBill(id){const e=DB.E.find(x=>x.id==id),p=party(e.pid),text=billMsg(e),name=`Bill-${e.id}.png`;let blob=null;try{blob=c2b(billCanvas(e))}catch(er){}
  const fin=fb=>{e.wa=1;save();closeS();toast(fb?Lp('Bill download ho gaya. WhatsApp mein attach kar dein','بل ڈاؤن لوڈ ہو گیا۔ واٹس ایپ میں لگا دیں'):Lp('Bill bhej diya','بل بھیج دیا'));render(true)};
  try{if(blob&&navigator.canShare){const file=new File([blob],name,{type:'image/png'});if(navigator.canShare({files:[file]})){await navigator.share({files:[file],text});fin();return}}}catch(er){if(er&&er.name==='AbortError')return}
- try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(er){}
  const num=(p.wa||'').replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/'+(/^03\d{9}$/.test(num)?'92'+num.slice(1):'')+'?text='+encodeURIComponent(text);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
+ try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(er){}
  fin(1)}
+const API=/pages\.dev$|^localhost$|^127\./.test(location.hostname)?'/api/pack':'https://max-mart-app.pages.dev/api/pack';
+const c2b=c=>{const u=c.toDataURL('image/png'),b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return new Blob([a],{type:'image/png'})};
 const b64e=o=>btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const b64d=s=>{try{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return JSON.parse(decodeURIComponent(escape(atob(s))))}catch(e){return null}};
-function packLink(e,s){const p=party(e.pid);const o={i:e.id,c:p.n,sh:p.shop||'',v:e.v||p.v,d:e.d,n:s.n,it:e.items.map(([k,q])=>{const{it,v}=PK(k);return[it.ro,it.ur,v.ro,v.ur,q,typeof it.img==='string'&&!it.img.startsWith('data:')&&it.img!=='none'?it.img:'']})};
+function packLink(e,s){const p=party(e.pid);const o={ch:DB.ch,i:e.id,c:p.n,sh:p.shop||'',v:e.v||p.v,d:e.d,n:s.n,it:e.items.map(([k,q])=>{const{it,v}=PK(k);return[it.ro,it.ur,v.ro,v.ur,q,typeof it.img==='string'&&!it.img.startsWith('data:')&&it.img!=='none'?it.img:'']})};
  const base=/pages\.dev$|^localhost$|^127\./.test(location.hostname)?location.origin+location.pathname:'https://max-mart-app.pages.dev/';return base+'?pk='+b64e(o)}
 const pkKey=()=>'mmpk_'+(S.pkd?S.pkd.i:'');
 function pkTicks(){try{return JSON.parse(localStorage.getItem(pkKey())||'{}')}catch(e){return S.pkt||{}}}
@@ -968,7 +970,9 @@ V.packer=()=>{const d=S.pkd;if(!d)return `<div class="empty">${L('Ye link theek 
  ${d.it.map(([ro,ur,vr,vu,q,img],i)=>{const on=!!t[i];return `<button class="pkrow ${on?'done':''}" data-a="ptk" data-v="${i}"><span class="tk">${on?CHECK:''}</span><span class="pa" style="background:#FFF4DA">${art(img||'none')}</span><span class="t"><b>${L(ro,ur||ro)}</b><small>${L(vr,vu||vr)}</small></span><span class="qb"><strong>× ${q}</strong></span></button>`}).join('')}
  <p class="note" style="margin-top:0">${L('Har cheez pack karte waqt us par tick lagayein','ہر چیز پیک کرتے وقت اس پر ٹک لگائیں')}</p>
  ${done===n&&n?`<div class="alldone"><b>${L('Sab pack ho gaya!','سب پیک ہو گیا!')}</b>${L('Ab owner ko bata dein','اب مالک کو بتا دیں')}</div>`:''}
- <button class="big ${done===n?'wa':'ghost'}" data-a="pdone">${WA.replace('#fff',done===n?'#fff':'#1FA855')} ${L('Owner ko batayein: pack ho gaya','مالک کو بتائیں: پیک ہو گیا','Tell owner: packed')}</button></div>`};
+ ${S.pkSentOk?`<div class="sentok"><i>${CHECK}</i><span>${L('Owner ko bata diya · app mein pohanch gaya','مالک کو بتا دیا · ایپ میں پہنچ گیا','Owner notified in the app')}</span></div>`:''}
+ <button class="big ${done===n?'':'ghost'}" data-a="pdone" ${S.pkBusy?'disabled':''}>${CHECK} ${S.pkBusy?L('Bhej rahe hain…','بھیج رہے ہیں…','Sending…'):L('Owner ko batayein: pack ho gaya','مالک کو بتائیں: پیک ہو گیا','Tell owner: packed')}</button>
+ ${S.pkErr?`<p class="note" style="color:var(--red)">${L('Message nahi gaya. Internet check karke dobara dabayein','میسج نہیں گیا۔ انٹرنیٹ چیک کر کے دوبارہ دبائیں','Not sent. Check internet and try again')}</p>`:''}</div>`};
 function packCanvas(e,s){const p=party(e.pid),rows=e.items,W=1080,RH=96,H=760+rows.length*RH,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),F=(w,z)=>`${w} ${z}px "Baloo 2", sans-serif`;
  x.fillStyle='#F7F4EA';x.fillRect(0,0,W,H);x.fillStyle='#0E5C46';x.fillRect(0,0,W,200);
  x.fillStyle='#FFC531';x.beginPath();x.arc(110,100,46,0,7);x.fill();x.fillStyle='#083D2F';x.font=F(800,44);x.textAlign='center';x.fillText('M',110,116);x.textAlign='left';
@@ -983,16 +987,16 @@ function packCanvas(e,s){const p=party(e.pid),rows=e.items,W=1080,RH=96,H=760+ro
  y+=30;x.fillStyle='#fff';x.fillRect(40,y,W-80,90);x.strokeStyle='#E8E3D3';x.lineWidth=2;x.strokeRect(40,y,W-80,90);x.fillStyle='#14231C';x.font=F(800,32);
  x.fillText(`Kul: ${rows.length} cheezein`,70,y+58);x.textAlign='right';x.fillText(`${rows.reduce((a,[,q])=>a+q,0)} adad`,W-70,y+58);x.textAlign='left';
  y+=120;x.fillStyle='#FFC531';x.fillRect(40,y,W-80,120);x.fillStyle='#083D2F';x.font=F(800,28);x.fillText('Har cheez pack karke us ke box mein tick lagayein',70,y+50);
- x.font=F(600,24);x.fillText(`Sab pack ho jaye to owner ko batayein: "${p.n.split(' ')[0]} / Order #${e.id} pack ho gaya"`,70,y+92);return c}
+ x.font=F(600,24);x.fillText('Sab pack ho jaye to link khol kar "Owner ko batayein" button dabayein',70,y+92);return c}
 function packSheet(sid){const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===sid);if(!e||!s)return;let url='';try{url=packCanvas(e,s).toDataURL('image/png')}catch(er){}
  sheet(`<div class="grab"></div><h3>${L('Packing list ki file','پیکنگ لسٹ کی فائل')}</h3><p>${esc(s.n)} · ${L('Order','آرڈر')} #${e.id}</p><div class="stmt"><img src="${url}" alt="Packing list"></div><button class="big wa" data-a="pkshare" data-v="${s.id}">${WA} ${L(esc(s.n)+' ko WhatsApp par bhejein',esc(s.n)+' کو واٹس ایپ پر بھیجیں','Send to '+esc(s.n)+' on WhatsApp')}</button><p class="note">${L('Ali WhatsApp mein tasveer par qalam (draw) se tick laga sakta hai','علی واٹس ایپ میں تصویر پر قلم سے ٹک لگا سکتا ہے','The packer can tick boxes using WhatsApp\'s draw tool')}</p>`)}
 async function sharePack(sid){const e=DB.E.find(x=>x.id==S.oid),s=(DB.staff||[]).find(x=>x.id===sid);if(!e||!s)return;const p=party(e.pid),name=`Packing-${e.id}.png`;
  const text=`*MAX BACHAT MART · Packing list*\nOrder #${e.id} · ${p.shop||p.n} (${e.v||p.v})\n${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nList kholein, har cheez pack karte waqt tick lagayein aur aakhir mein button daba kar owner ko batayein:\n${packLink(e,s)}`;
- let blob=null;try{blob=await new Promise(r=>packCanvas(e,s).toBlob(r,'image/png'))}catch(er){}
+ let blob=null;try{blob=c2b(packCanvas(e,s))}catch(er){}
  const fin=fb=>{e.packer=s.id;e.pkSent=s.n;save();closeS();toast(fb?Lp('File download ho gayi. Ali ki chat mein attach kar dein','فائل ڈاؤن لوڈ ہو گئی۔ علی کی چیٹ میں لگا دیں','File downloaded. Attach it in the chat'):Lp(`${s.n} ko list bhej di`,`${s.n} کو لسٹ بھیج دی`,`List sent to ${s.n}`));render(true)};
  try{if(blob&&navigator.canShare){const file=new File([blob],name,{type:'image/png'});if(navigator.canShare({files:[file]})){await navigator.share({files:[file],text});fin();return}}}catch(er){if(er&&er.name==='AbortError')return}
- try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(er){}
  const num=s.wa.replace(/[^0-9]/g,'');try{const w=document.createElement('a');w.href='https://wa.me/92'+num.slice(1)+'?text='+encodeURIComponent(text);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}
+ try{if(blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove()}}catch(er){}
  fin(1)}
 function packMsg(e,s){const p=party(e.pid);return `*MAX BACHAT MART · Packing list*\n\nAssalam o Alaikum ${s.n},\n*Order #${e.id}* · ${p.shop||p.n} (${e.v||p.v})\n${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nList kholein aur har cheez pack karte waqt tick lagayein:\n${packLink(e,s)}`;const lines=e.items.map(([k,q],i)=>{const{it,v}=PK(k);return `${i+1}. ${it.ro} · ${v.ro}  × ${q}`});
  return `*MAX BACHAT MART · Packing list*\n\nAssalam o Alaikum ${s.n},\nYe order pack karna hai:\n\n*Order #${e.id}*\nCustomer: *${p.n}*${p.shop?' ('+p.shop+')':''}\nGaon: ${e.v||p.v}\nTareekh: ${fd(e.d)}\n\n${lines.join('\n')}\n\nKul: ${e.items.length} cheezein · ${e.items.reduce((a,[,q])=>a+q,0)} adad\n\nPack karke owner ko batayein: "${p.n.split(' ')[0]} / Order #${e.id} pack ho gaya"`}
@@ -1020,6 +1024,7 @@ function render(keep){if((S.role==='customer'||S.role==='shop')&&!me())S.view='r
  if(S.role==='customer'||S.role==='shop')checkNotes();if(S.role==='packer')S.view='packer';
  hdr();const top=view.scrollTop;view.innerHTML=(V[S.view]||V.choose)();view.scrollTop=keep?top:0;tabs();
  if(S.view==='home')startBan();else clearInterval(banT);
+ if(S.role==='owner'){if(!pollT)startPoll()}else{clearInterval(pollT);pollT=null}
  const q=$('#q');if(q)q.addEventListener('input',e=>search(e.target.value));
  const fi=$('#fimg');if(fi)fi.addEventListener('change',ev=>{const fl=ev.target.files&&ev.target.files[0];if(fl)loadImg(fl)});
  const rf=$('#regf');if(rf)rf.addEventListener('submit',ev=>{ev.preventDefault();register()});
@@ -1041,6 +1046,13 @@ function fly(el){try{const a=app.getBoundingClientRect(),s=el.getBoundingClientR
  f.animate([{transform:`translate(${x0}px,${y0}px)`},{transform:`translate(${(x0+x1)/2}px,${Math.min(y0,y1)-80}px) scale(1.1)`},{transform:`translate(${x1}px,${y1}px) scale(.3)`,opacity:.4}],{duration:650,easing:'cubic-bezier(.4,0,.6,1)'}).onfinish=()=>{f.remove();badge()}}catch(e){badge()}}
 function refreshQty(){render(true)}
 
+/* packer -> owner notifications (server) */
+let pollT=null;
+async function pollPack(){if(S.role!=='owner'||!DB.ch)return;try{const r=await fetch(API+'?ch='+DB.ch+'&since='+(DB.pkLast||0),{cache:'no-store'});if(!r.ok)return;const list=await r.json();let ch=0;
+ for(const x of list){DB.pkLast=Math.max(DB.pkLast||0,x.at);const e=DB.E.find(o=>o.id==x.i&&o.k==='o');if(e&&!e.pkDone){e.pkDone={n:x.n,at:x.at,d:x.d,t:x.t};ch=1;ownerNote(e,x)}}
+ if(list.length){save();if(ch)render(true)}}catch(er){}}
+function startPoll(){clearInterval(pollT);if(S.role==='owner'){pollPack();pollT=setInterval(pollPack,8000)}}
+function ownerNote(e,x){const p=party(e.pid),n=$('#note');n.innerHTML=`<button data-a="oorder" data-v="${e.id}"><i>${CHECK.replace('currentColor','#fff')}</i><span>${L(`${x.n} ne bataya: pack ho gaya`,`${x.n} نے بتایا: پیک ہو گیا`,`${x.n}: packing done`)}<small>${L('Order','آرڈر')} #${e.id} · ${esc(pname(p))} · ${x.d}/${x.t}</small></span></button>`;n.classList.add('on');clearTimeout(n._t);n._t=setTimeout(()=>n.classList.remove('on'),9000)}
 /* order status notifications for the customer / shop apps */
 function checkNotes(){const id=me();if(!id)return;for(const e of DB.E){if(e.pid!==id||e.k!=='o')continue;const p=S.seen[e.id];if(p&&p!==e.st)notify(e);S.seen[e.id]=e.st}}
 function notify(e){const n=$('#note');n.innerHTML=`<button data-a="openord" data-v="${e.id}"><i>${CHECK.replace('currentColor','#fff')}</i><span>${L(...STL[e.st])}<small>${L('Order','آرڈر')} #${e.id} · ${N(e.amt)}</small></span></button>`;n.classList.add('on');clearTimeout(n._t);n._t=setTimeout(()=>n.classList.remove('on'),6000)}
@@ -1077,9 +1089,10 @@ const A={
  reset:()=>{DB=fresh();save();S.seen={};S.sent={};S.carts={customer:{},shop:{}};toast(Lp('Sab data saaf ho gaya','سب ڈیٹا صاف ہو گیا'));render()},
  go:v=>{closeS();go(v)},
  ptk:v=>{const t=pkTicks();t[v]=!t[v];pkSave(t);render(true)},
- pdone:()=>{const d=S.pkd;if(!d)return;const t=pkTicks(),n=d.it.length,done=d.it.filter((_,i)=>t[i]).length;
-  const msg=`${(d.c||'').split(' ')[0]} / Order #${d.i} ${done===n?'pack ho gaya ✓':'packing jari hai'} (${done}/${n} cheezein)`;
-  try{const w=document.createElement('a');w.href='https://wa.me/?text='+encodeURIComponent(msg);w.target='_blank';w.rel='noopener';document.body.appendChild(w);w.click();w.remove()}catch(er){}},
+ pdone:async()=>{const d=S.pkd;if(!d||S.pkBusy)return;const t=pkTicks(),n=d.it.length,done=d.it.filter((_,i)=>t[i]).length;
+  S.pkBusy=1;S.pkErr=0;render(true);
+  try{const r=await fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({ch:d.ch,i:d.i,n:d.n,c:d.sh||d.c,d:done,t:n})});const j=await r.json();if(!j.ok)throw 0;S.pkSentOk=1;toast(Lp('Owner ko bata diya','مالک کو بتا دیا','Owner notified'))}catch(er){S.pkErr=1}
+  S.pkBusy=0;render(true)},
  addpk:()=>staffSheet(),
  savepk:()=>{const n=($('#s_n').value||'').trim(),wa=normPh($('#s_wa').value);if(n.length<2){$('#serr').innerHTML=L('Naam likhein','نام لکھیں');return}if(!wa){$('#serr').innerHTML=L('WhatsApp number theek likhein, jaise 0300 1234567','واٹس ایپ نمبر ٹھیک لکھیں، جیسے 0300 1234567');return}
   const s={id:'st'+Date.now().toString(36),n,wa};DB.staff.push(s);const e=DB.E.find(x=>x.id==S.oid);if(e&&S.view==='oorder')e.packer=s.id;save();closeS();toast(Lp(`${n} save ho gaya`,`${n} محفوظ ہو گیا`,`${n} saved`));render(true)},
